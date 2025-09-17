@@ -33,7 +33,13 @@ namespace Scramble
                 ground[i] = ground[i-1] + GlobalHelpers.alea.Next(0, 7)-3;
             }
             ClientSize = new Size(WIDTH, HEIGHT);
+
+
+            this.KeyPreview = true; // Ensures the form captures key events before child controls
+            this.KeyDown += AirSpace_KeyDown;
         }
+
+        
 
         // Affichage de la situation actuelle
         private void Render()
@@ -73,6 +79,26 @@ namespace Scramble
         {
             this.Update(ticker.Interval);
             this.Render();
+        }
+
+        // Read key
+        private void AirSpace_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.W:
+                    
+                    break;
+                case Keys.A:
+
+                    break;
+                case Keys.S:
+
+                    break;
+                case Keys.D:
+
+                    break;
+            }
         }
     }
 }

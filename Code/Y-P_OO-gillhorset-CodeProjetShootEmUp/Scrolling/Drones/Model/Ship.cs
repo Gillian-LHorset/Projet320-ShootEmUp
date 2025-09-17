@@ -25,10 +25,9 @@
         // que 'interval' millisecondes se sont écoulées
         public void Update(int interval)
         {
-            _x += 2;                                    // Il s'est déplacé de 2 pixels vers la droite
-            _y += GlobalHelpers.alea.Next(-2, 3);       // Il s'est déplacé d'une valeur aléatoire vers le haut ou le bas
-            _tanklevel--;                                  // Il a dépensé de l'énergie
+                                         // Il a dépensé de l'énergie
         }
+
 
     }
 }
