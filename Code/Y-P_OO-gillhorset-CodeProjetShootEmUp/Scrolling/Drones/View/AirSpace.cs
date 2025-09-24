@@ -1,3 +1,5 @@
+using Scramble.Properties;
+
 namespace Scramble
 {
     // La classe AirSpace représente le territoire au dessus duquel les vaisseau peuvent voler
@@ -53,6 +55,7 @@ namespace Scramble
             for (int i = 0; i < ground.Length; i++)
             {
                 airspace.Graphics.FillRectangle(groundBrush, new Rectangle(i * 10-scrollSmoother, HEIGHT - ground[i], 10, ground[i]));
+                //Console.WriteLine($"ground i :{ground[i]}   , ship Y{ship.Y}");
             }
             scrollSmoother = (scrollSmoother + 5) % 10;
             if (scrollSmoother == 0)
@@ -97,13 +100,14 @@ namespace Scramble
                     }
                     break;
                 case Keys.S:
-                    if (ship.Y + 77 < HEIGHT)
+                    Console.WriteLine($"ship Y = {ship.Y}, ground ship x/10+1 {ground[ship.X / 10 + 1]}");
+                    if (ship.Y + Resources.ship.Height < HEIGHT && ground[ship.X / 10 + 1] < ship.Y)
                     {
                         ship.Y += 15;
                     }
                     break;
                 case Keys.D:
-                    if (ship.X + 110 < WIDTH)
+                    if (ship.X + Resources.ship.Width < WIDTH)
                     {
                         ship.X += 15;
                     }
