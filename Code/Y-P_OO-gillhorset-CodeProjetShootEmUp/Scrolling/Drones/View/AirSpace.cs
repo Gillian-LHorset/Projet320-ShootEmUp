@@ -85,16 +85,28 @@ namespace Scramble
             switch (e.KeyCode)
             {
                 case Keys.W:
-                    
+                    if (ship.Y > 1)
+                    {
+                        ship.Y -= 15;
+                    }
                     break;
                 case Keys.A:
-
+                    if (ship.X > 1)
+                    {
+                        ship.X -= 15;
+                    }
                     break;
                 case Keys.S:
-
+                    if (ship.Y + 77 < HEIGHT)
+                    {
+                        ship.Y += 15;
+                    }
                     break;
                 case Keys.D:
-
+                    if (ship.X + 110 < WIDTH)
+                    {
+                        ship.X += 15;
+                    }
                     break;
             }
         }

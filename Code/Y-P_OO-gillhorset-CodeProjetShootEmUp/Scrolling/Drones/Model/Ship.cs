@@ -15,10 +15,9 @@
             _x = x;
             _y = y;
             _name = name;
-            _tanklevel = GlobalHelpers.alea.Next(FULLTANK); // La charge initiale de la batterie est choisie aléatoirement
         }
-        public int X { get { return _x;} }
-        public int Y { get { return _y;} }
+        public int X { get { return _x; } set { _x = value; } }
+        public int Y { get { return _y;} set { _y = value; } }
         public string Name { get { return _name;} }
 
         // Cette méthode calcule le nouvel état dans lequel le ship se trouve après
