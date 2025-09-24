@@ -13,11 +13,10 @@ namespace Scramble
             ApplicationConfiguration.Initialize();
 
             // Création de la flotte de ships
-            List<Ship> fleet= new List<Ship>();
-            fleet.Add(new Ship(0, AirSpace.HEIGHT / 2, "Joe"));
+            Ship ship = new Ship(0, AirSpace.HEIGHT / 2, "Joe");
 
             // Démarrage
-            Application.Run(new AirSpace(fleet));
+            Application.Run(new AirSpace(ship));
         }
     }
 }

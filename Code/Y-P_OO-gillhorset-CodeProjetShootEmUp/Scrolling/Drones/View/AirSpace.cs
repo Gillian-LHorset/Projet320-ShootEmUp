@@ -9,7 +9,7 @@ namespace Scramble
         public static readonly int HEIGHT = 900;
 
         // La flotte est l'ensemble des ships qui évoluent dans notre espace aérien
-        private List<Ship> fleet;
+        private Ship ship;
 
         BufferedGraphicsContext currentContext;
         BufferedGraphics airspace;
@@ -18,7 +18,7 @@ namespace Scramble
         int scrollSmoother = 0;
 
         // Initialisation de l'espace aérien avec un certain nombre de ships
-        public AirSpace(List<Ship> fleet)
+        public AirSpace(Ship ship)
         {
             InitializeComponent();
             // Gets a reference to the current BufferedGraphicsContext
@@ -26,7 +26,7 @@ namespace Scramble
             // Creates a BufferedGraphics instance associated with this form, and with
             // dimensions the same size as the drawing surface of the form.
             airspace = currentContext.Allocate(this.CreateGraphics(), this.DisplayRectangle);
-            this.fleet = fleet;
+            this.ship = ship;
             ground[0] = HEIGHT / 5;
             for (int i = 1; i < ground.Length; i++)
             {
@@ -47,10 +47,9 @@ namespace Scramble
             airspace.Graphics.Clear(Color.AliceBlue);
 
             // draw ships
-            foreach (Ship ship in fleet)
-            {
-                ship.Render(airspace);
-            }
+            
+            ship.Render(airspace);
+            
             for (int i = 0; i < ground.Length; i++)
             {
                 airspace.Graphics.FillRectangle(groundBrush, new Rectangle(i * 10-scrollSmoother, HEIGHT - ground[i], 10, ground[i]));
@@ -68,10 +67,9 @@ namespace Scramble
         // Calcul du nouvel état après que 'interval' millisecondes se sont écoulées
         private void Update(int interval)
         {
-            foreach (Ship ship in fleet)
-            {
-                ship.Update(interval);
-            }
+            
+            ship.Update(interval);
+            
         }
 
         // Méthode appelée à chaque frame
