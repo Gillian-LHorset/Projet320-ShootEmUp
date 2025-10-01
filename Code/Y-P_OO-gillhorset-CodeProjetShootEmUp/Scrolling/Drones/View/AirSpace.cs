@@ -39,6 +39,7 @@ namespace Scramble
 
             this.KeyPreview = true; // Ensures the form captures key events before child controls
             this.KeyDown += AirSpace_KeyDown;
+            this.KeyUp += AirSpace_KeyUp;
         }
 
         
@@ -88,31 +89,38 @@ namespace Scramble
             switch (e.KeyCode)
             {
                 case Keys.W:
-                    if (ship.Y > 1)
-                    {
-                        ship.Y -= 15;
-                    }
+                    bool goUp = true;
                     break;
                 case Keys.A:
-                    if (ship.X > 1)
-                    {
-                        ship.X -= 15;
-                    }
+                    bool goLeft = true;
                     break;
                 case Keys.S:
-                    Console.WriteLine($"ship Y = {ship.Y}, ground ship x/10+1 {ground[ship.X / 10 + 1]}");
-                    if (ship.Y + Resources.ship.Height < HEIGHT && ground[ship.X / 10 + 1] < ship.Y)
-                    {
-                        ship.Y += 15;
-                    }
+                    bool goDown = true;
                     break;
                 case Keys.D:
-                    if (ship.X + Resources.ship.Width < WIDTH)
-                    {
-                        ship.X += 15;
-                    }
+                    bool goRight = true;
                     break;
             }
         }
+        private void AirSpace_KeyUp(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.W:
+                    bool goUp = false;
+                    break;
+                case Keys.A:
+                    bool goLeft = false;
+                    break;
+                case Keys.S:
+                    bool goDown = false;
+                    break;
+                case Keys.D:
+                    bool goRight = false;
+                    break;
+            }
+        }
+    
+        
     }
 }
