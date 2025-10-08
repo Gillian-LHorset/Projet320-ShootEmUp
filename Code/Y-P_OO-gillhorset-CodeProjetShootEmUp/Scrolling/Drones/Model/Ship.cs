@@ -22,35 +22,45 @@
 
         // Cette méthode calcule le nouvel état dans lequel le ship se trouve après
         // que 'interval' millisecondes se sont écoulées
-        public bool goUp { get { return goUpBool; } set { goUpBool = value; } }
+        public bool GoUp { get { return _goUpBool; } set { _goUpBool = value; } }
         public bool goLeft { get { return goLeftBool; } set { goLeftBool = value; } }
         public bool goDown { get { return goDownBool; } set { goDownBool = value; } }
         public bool goRight { get { return goRightBool; } set { goRightBool = value; } }
-        private bool goUpBool;
+        
+        private bool _goUpBool;
         private bool goLeftBool;
         private bool goDownBool;
         private bool goRightBool;
+
         public void MoveShip()
         {
 
-            if (goUpBool)
+            if (_goUpBool)
             {
-                _y -= 15;
+                if (_y > 10) {
+                    _y -= 15;
+                }
             }
             if (goLeftBool)
             {
-                _x -= 15;
+                if (_x > 10)
+                {
+                    _x -= 15;
+                }
 
             }
             if (goDownBool)
             {
-                _y += 15;
-
+                if (_y < AirSpace.HEIGHT - Ship.HEIGHT)
+                {
+                    _y += 15;
+                }
             }
             if (goRightBool)
             {
-                _x += 15;
-
+                if (_x < AirSpace.WIDTH - Ship.WIDTH) {
+                    _x += 15;
+                }
             }
 
         }

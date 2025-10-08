@@ -56,7 +56,7 @@ namespace Scramble
             for (int i = 0; i < ground.Length; i++)
             {
                 airspace.Graphics.FillRectangle(groundBrush, new Rectangle(i * 10-scrollSmoother, HEIGHT - ground[i], 10, ground[i]));
-                //Console.WriteLine($"ground i :{ground[i]}   , ship Y{ship.Y}");
+
             }
             scrollSmoother = (scrollSmoother + 5) % 10;
             if (scrollSmoother == 0)
@@ -89,16 +89,16 @@ namespace Scramble
             switch (e.KeyCode)
             {
                 case Keys.W:
-                    bool goUp = true;
+                    ship.GoUp = true;
                     break;
                 case Keys.A:
-                    bool goLeft = true;
+                    ship.goLeft = true;
                     break;
                 case Keys.S:
-                    bool goDown = true;
+                    ship.goDown = true;
                     break;
                 case Keys.D:
-                    bool goRight = true;
+                    ship.goRight = true;
                     break;
             }
         }
@@ -107,16 +107,16 @@ namespace Scramble
             switch (e.KeyCode)
             {
                 case Keys.W:
-                    bool goUp = false;
+                    ship.GoUp = false;
                     break;
                 case Keys.A:
-                    bool goLeft = false;
+                    ship.goLeft = false;
                     break;
                 case Keys.S:
-                    bool goDown = false;
+                    ship.goDown = false;
                     break;
                 case Keys.D:
-                    bool goRight = false;
+                    ship.goRight = false;
                     break;
             }
         }

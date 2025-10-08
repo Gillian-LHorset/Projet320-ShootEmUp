@@ -7,11 +7,13 @@ namespace Scramble
 
     public partial class Ship
     {
-
+        public static readonly int WIDTH = 100;
+        public static readonly int HEIGHT = 40;
         // De manière graphique
         public void Render(BufferedGraphics drawingSpace)
         {
-            drawingSpace.Graphics.DrawImage(Resources.ship, X,Y,100,40);
+            MoveShip();
+            drawingSpace.Graphics.DrawImage(Resources.ship, X,Y,WIDTH, HEIGHT);
             drawingSpace.Graphics.DrawString($"{this}", TextHelpers.drawFont, TextHelpers.writingBrush, X + 5, Y - 25);
         }
 
