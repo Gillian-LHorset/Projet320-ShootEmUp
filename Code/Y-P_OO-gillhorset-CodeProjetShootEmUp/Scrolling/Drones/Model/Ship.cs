@@ -23,14 +23,19 @@
         // Cette méthode calcule le nouvel état dans lequel le ship se trouve après
         // que 'interval' millisecondes se sont écoulées
         public bool GoUp { get { return _goUpBool; } set { _goUpBool = value; } }
-        public bool goLeft { get { return goLeftBool; } set { goLeftBool = value; } }
-        public bool goDown { get { return goDownBool; } set { goDownBool = value; } }
-        public bool goRight { get { return goRightBool; } set { goRightBool = value; } }
+        public bool GoLeft { get { return _goLeftBool; } set { _goLeftBool = value; } }
+        public bool GoDown { get { return _goDownBool; } set { _goDownBool = value; } }
+        public bool GoRight { get { return _goRightBool; } set { _goRightBool = value; } }
         
         private bool _goUpBool;
-        private bool goLeftBool;
-        private bool goDownBool;
-        private bool goRightBool;
+        private bool _goLeftBool;
+        private bool _goDownBool;
+        private bool _goRightBool;
+
+        public bool test = false;
+
+
+        public int[] ShipGound = new int[AirSpace.WIDTH / 10 + 1];
 
         public void MoveShip()
         {
@@ -41,7 +46,7 @@
                     _y -= 15;
                 }
             }
-            if (goLeftBool)
+            if (_goLeftBool)
             {
                 if (_x > 10)
                 {
@@ -49,14 +54,23 @@
                 }
 
             }
-            if (goDownBool)
+            if (_goDownBool)
             {
-                if (_y < AirSpace.HEIGHT - Ship.HEIGHT)
-                {
+                for (int i = 0; i < 10; i++)
+                {//[AirSpace.WIDTH / 10]
+                    if (Ship.HEIGHT + _y < AirSpace.HEIGHT - ShipGound[1]) // position x du vaisseau entre crochet
+                        // si la hauteur de la position du vaisseau et sa taille sont superieur à
+                        // la hauteur de l'écran moins la hauteur du sol
+                    {
+                        test = true;
+                    } else { test = false; break; }
+                }
+                if (test && _y < AirSpace.HEIGHT - Ship.HEIGHT) //&& _y + Ship.HEIGHT < AirSpace.HEIGHT - AirSpace.HEIGHT/5
+                {                    
                     _y += 15;
                 }
             }
-            if (goRightBool)
+            if (_goRightBool)
             {
                 if (_x < AirSpace.WIDTH - Ship.WIDTH) {
                     _x += 15;

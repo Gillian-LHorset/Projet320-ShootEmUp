@@ -61,10 +61,13 @@ namespace Scramble
             scrollSmoother = (scrollSmoother + 5) % 10;
             if (scrollSmoother == 0)
             {
-                for (int i = 1;i < ground.Length; i++) ground[i-1] = ground[i];
-                ground[ground.Length - 1] = ground[ground.Length - 2] + GlobalHelpers.alea.Next(0, 7) - 3;
+                for (int i = 1; i < ground.Length; i++)
+                {
+                    ground[i - 1] = ground[i];
+                    ground[ground.Length - 1] = ground[ground.Length - 2] + GlobalHelpers.alea.Next(0, 7) - 3;
+                    ship.ShipGound[i] = ground[i];
+                }
             }
-
             airspace.Render();
         }
 
@@ -92,13 +95,13 @@ namespace Scramble
                     ship.GoUp = true;
                     break;
                 case Keys.A:
-                    ship.goLeft = true;
+                    ship.GoLeft = true;
                     break;
                 case Keys.S:
-                    ship.goDown = true;
+                    ship.GoDown = true;
                     break;
                 case Keys.D:
-                    ship.goRight = true;
+                    ship.GoRight = true;
                     break;
             }
         }
@@ -110,13 +113,13 @@ namespace Scramble
                     ship.GoUp = false;
                     break;
                 case Keys.A:
-                    ship.goLeft = false;
+                    ship.GoLeft = false;
                     break;
                 case Keys.S:
-                    ship.goDown = false;
+                    ship.GoDown = false;
                     break;
                 case Keys.D:
-                    ship.goRight = false;
+                    ship.GoRight = false;
                     break;
             }
         }
