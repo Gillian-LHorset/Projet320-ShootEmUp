@@ -34,8 +34,7 @@
 
         public bool test = false;
 
-
-        public int[] ShipGound = new int[AirSpace.WIDTH / 10 + 1];
+        public int[] ShipGround = new int[AirSpace.WIDTH / 10 + 1];
 
         public void MoveShip()
         {
@@ -57,18 +56,21 @@
             if (_goDownBool)
             {
                 for (int i = 0; i < 10; i++)
-                {//[AirSpace.WIDTH / 10]
-                    if (Ship.HEIGHT + _y < AirSpace.HEIGHT - ShipGound[1]) // position x du vaisseau entre crochet
-                        // si la hauteur de la position du vaisseau et sa taille sont superieur à
-                        // la hauteur de l'écran moins la hauteur du sol
+                {
+                    if (Ship.HEIGHT + _y + 30 < AirSpace.HEIGHT - ShipGround[_x / 10])  // position x du vaisseau entre crochet
+                                                                             // si la hauteur de la position du vaisseau et sa taille sont superieur à
+                                                                             // la hauteur de l'écran moins la hauteur du sol
                     {
                         test = true;
-                    } else { test = false; break; }
+                    }
+                    else { test = false; break; }
+
                 }
-                if (test && _y < AirSpace.HEIGHT - Ship.HEIGHT) //&& _y + Ship.HEIGHT < AirSpace.HEIGHT - AirSpace.HEIGHT/5
-                {                    
+                if (test && _y < AirSpace.HEIGHT - Ship.HEIGHT)
+                {
                     _y += 15;
                 }
+
             }
             if (_goRightBool)
             {

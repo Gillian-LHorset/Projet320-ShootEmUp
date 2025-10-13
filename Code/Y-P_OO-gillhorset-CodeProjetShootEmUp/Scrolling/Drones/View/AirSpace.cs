@@ -65,7 +65,7 @@ namespace Scramble
                 {
                     ground[i - 1] = ground[i];
                     ground[ground.Length - 1] = ground[ground.Length - 2] + GlobalHelpers.alea.Next(0, 7) - 3;
-                    ship.ShipGound[i] = ground[i];
+                    ship.ShipGround[i] = ground[i];
                 }
             }
             airspace.Render();
