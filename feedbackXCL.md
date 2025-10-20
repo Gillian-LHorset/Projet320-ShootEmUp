@@ -21,3 +21,28 @@
 - Votre journal de travail est vide. Il ne donne aucune explication de pourquoi vous êtes bloqué. "beaucoup de bug de l'editeur" ne m'aide pas: quel éditeur ? quel bug ? pourquoi est-ce que ça vous bloque pendant 3 heures ?
 - Il n'y a toujours rien de consistant en termes de rapport dans votre repo
 - Je m'interroge: que faites-vous durant les périodes de projet ? Quelle que soit la réponse, il semble que ce ne soit pas adapté.
+
+## 80%
+
+Les valeurs possibles du résultat sont: LA (Largement Acquis), A (Acquis), I (Insuffisant), NA (non acquis)
+
+| Critère                    | Résultat | Commentaire |
+| -------------------------- | -------- | ----------- |
+| Avancement Obstacles       |          |             |
+| Avancement Joueur          |          |             |
+| Avancement Tirs            |          |             |
+| Avancement ennemis         |          |             |
+| Avancement score           |          |             |
+| Qualité Présentation       |          |             |
+| Qualité Commentaires       |          |             |
+| Qualité Conventions        |          |             |
+| POO                        |          |             |
+| Processus Journal          |          |             |
+| Processus Git              |          |             |
+| Processus Livraison        |          |             |
+| Expression User Stories    |          |             |
+| Expression Rapport Fome    |          |             |
+| Expression Rapport Contenu |          |             |
+| Ecologie (gitignore)       |          |             |
+| Comportement collectif     |          |             |
+| Comportement individuel    |          |             |
