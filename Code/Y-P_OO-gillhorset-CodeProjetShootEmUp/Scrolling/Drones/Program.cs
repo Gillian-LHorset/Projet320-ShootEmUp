@@ -13,7 +13,7 @@ namespace Scramble
             ApplicationConfiguration.Initialize();
 
             // Création de la flotte de ships
-            Ship ship = new Ship(0, AirSpace.HEIGHT / 2, "Joe");
+            Ship ship = new Ship(0, AirSpace.HEIGHT / 2);
 
             // Démarrage
             Application.Run(new AirSpace(ship));

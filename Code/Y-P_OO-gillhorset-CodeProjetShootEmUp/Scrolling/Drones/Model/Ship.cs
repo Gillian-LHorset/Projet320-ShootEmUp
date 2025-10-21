@@ -1,24 +1,26 @@
-﻿namespace Scramble
+﻿using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Header;
+
+namespace Scramble
 {
     // Cette partie de la classe ship définit ce qu'est un ship par un modèle numérique
     public partial class Ship
     {
-        public static readonly int FULLTANK = 1000;   // Charge maximale de la batterie
-        private int _tanklevel;                            // La charge actuelle de la batterie
-        private string _name;                           // Un nom
         private int _x;                                 // Position en X depuis la gauche de l'espace aérien
-        private int _y;                                 // Position en Y depuis le haut de l'espace aérien
+        private int _y;
 
+        public Rectangle shipRectCollision;
         // Constructeur
-        public Ship(int x, int y, string name)
+        public Ship(int x, int y)
         {
             _x = x;
             _y = y;
-            _name = name;
+
+            shipRectCollision = new Rectangle(_x, _y, WIDTH, HEIGHT);
         }
         public int X { get { return _x; } set { _x = value; } }
         public int Y { get { return _y;} set { _y = value; } }
-        public string Name { get { return _name;} }
+
 
         // Cette méthode calcule le nouvel état dans lequel le ship se trouve après
         // que 'interval' millisecondes se sont écoulées
@@ -32,59 +34,172 @@
         private bool _goDownBool;
         private bool _goRightBool;
 
-        public bool test = false;
+
+        public int healPoint = 5;
+
+        public bool isShooting = false;
+        public List<Shoot> playerShoots = new List<Shoot>();
+
+        public bool isOkey = false;
+        public bool haveShoot = false;
+        public static bool isInLife = true;
 
         public int[] ShipGround = new int[AirSpace.WIDTH / 10 + 1];
 
+        // mise en place du cooldown de check de collision avec le sol
+        private DateTime _lastCollisionCheck;
+        private TimeSpan _collisionCooldown = TimeSpan.FromSeconds(2);
+
+        // mise en place du cooldown de tire
+        private DateTime _lastBulletShoot;
+        private TimeSpan _shootCooldown = TimeSpan.FromSeconds(0.4);
+
+        public static void HealBar(BufferedGraphics airspace, int x, int y, int healPoint)
+        {
+            int barWidth = Ship.WIDTH - 20;
+            int barHeight = 5;
+            // va center la barre sur le vaisseau
+            x += 10;
+
+            Brush healBarBrush = new SolidBrush(Color.Red);
+            Pen aroundHealBarPen = new Pen(Color.Black);
+            Brush decressesHealBarBrush = new SolidBrush(Color.Gray);
+
+            airspace.Graphics.FillRectangle(decressesHealBarBrush, new Rectangle    (x,y, barWidth, barHeight));
+
+            // zone rouge indiquant la vie du joueur
+            // sa taille est relavite a healPoint du joueur pour donner une indication de manière graphique
+            airspace.Graphics.FillRectangle(healBarBrush, new Rectangle             (x,y, (barWidth / 5) * healPoint, barHeight));
+            airspace.Graphics.DrawRectangle(aroundHealBarPen, new Rectangle         (x,y, barWidth, barHeight));
+            if (healPoint < 1)
+            {
+                isInLife = false;
+            }
+        }
         public void MoveShip()
         {
 
-            if (_goUpBool)
+            if (isInLife)
             {
-                if (_y > 10) {
-                    _y -= 15;
-                }
-            }
-            if (_goLeftBool)
-            {
-                if (_x > 10)
+                if (_goUpBool)
                 {
-                    _x -= 15;
-                }
-
-            }
-            if (_goDownBool)
-            {
-                for (int i = 0; i < 10; i++)
-                {
-                    if (Ship.HEIGHT + _y + 30 < AirSpace.HEIGHT - ShipGround[_x / 10])  // position x du vaisseau entre crochet
-                                                                             // si la hauteur de la position du vaisseau et sa taille sont superieur à
-                                                                             // la hauteur de l'écran moins la hauteur du sol
+                    if (_y > 10)
                     {
-                        test = true;
+                        _y -= 15;
                     }
-                    else { test = false; break; }
-
                 }
-                if (test && _y < AirSpace.HEIGHT - Ship.HEIGHT)
+                if (_goLeftBool)
                 {
-                    _y += 15;
+                    if (_x > 15)
+                    {
+                        _x -= 15;
+                    }
+
+                }
+                if (_goDownBool)
+                {
+                    if (Ship.HEIGHT + _y + 30 < AirSpace.HEIGHT - ShipGround[_x / 10])  
+                        // position x du vaisseau entre crochet
+                        // si la hauteur de la position du vaisseau et sa taille sont superieur à la hauteur de l'écran moins la hauteur du sol
+                    {
+                        isOkey = true;
+                    }
+                    else
+                    {
+                        isOkey = false;
+                    }
+                    if (isOkey && _y < AirSpace.HEIGHT - Ship.HEIGHT)
+                    {
+                        _y += 15;
+                    }
+
+                }
+                if (_goRightBool)
+                {
+                    if (_x < AirSpace.WIDTH - Ship.WIDTH - 10)
+                    {
+                        _x += 15;
+                    }
                 }
 
-            }
-            if (_goRightBool)
-            {
-                if (_x < AirSpace.WIDTH - Ship.WIDTH) {
-                    _x += 15;
+                if (isShooting)
+                {
+                    if (DateTime.Now - _lastBulletShoot >= _shootCooldown)
+                    {
+                        Shoot aShoot = new Shoot(_x + Ship.WIDTH, _y + Ship.HEIGHT / 2, true);
+                        playerShoots.Add(aShoot);
+                        _lastBulletShoot = DateTime.Now;
+                    }
                 }
             }
 
+            shipRectCollision.X = _x;
+            shipRectCollision.Y = _y;
         }
-        public void Update(int interval)
+
+        /// <summary>
+        /// La méthode détecte si le joueur est en collision avec le sol
+        /// </summary>
+        /// <returns>
+        /// s'il est en collision --> oui
+        /// s'il n'est pas en collision --> non
+        /// </returns>
+        public bool CheckGroundCollisionPlayer()
         {
-                                         // Il a dépensé de l'énergie
+            if (Ship.HEIGHT + _y > AirSpace.HEIGHT - ShipGround[_x / 10])
+            // si la position verticale du joueur est superieur à la valeur du tableau ShipGround qui correspond à sa position horisontale
+            // la valeur du tableau ShipGround définie la hauteur du sol
+            {
+
+                if (!PlayerCanBeHit())
+                // si le joueur ne peut pas être touché
+                {
+                    return false; // encore en cooldown, on quitte sans exécuter
+                }
+                PlayerHitIsNow();
+            }
+            if (!PlayerCanBeHit())
+            {
+                return false;
+
+            } else
+            {
+                return true;
+            }
         }
 
+        /// <summary>
+        /// La méthode va définir la dernière fois que le joueur à été touché et lui retirer
+        /// </summary>
+        public void PlayerHitIsNow()
+        {
+            _lastCollisionCheck = DateTime.Now;
+            // retire 1 point de vie au joueur   
+            healPoint--;
+        }
 
+        /// <summary>
+        /// Cette méthode va checker si le joueur peut resevoir des dégats ou si il est encore en cooldown de dégat
+        /// </summary>
+        /// <returns>
+        /// S'il peut en resevoir --> oui
+        /// S'il ne peut pas en resevoir --> non
+        /// </returns>
+        public bool PlayerCanBeHit()
+        {
+            bool canBeHit;
+            if (DateTime.Now - _lastCollisionCheck > _collisionCooldown)
+            // si la dernière fois qu'il a été tappé est supperieur au cooldown de dégat,
+            {
+                // il peut a nouveau être tappé
+                canBeHit = true;
+            } else
+            {
+                // sinon le cooldown n'est pas fini donc il ne peux pas l'être
+                canBeHit = false;
+            }
+            // va retourner si le joueur peut être touché ou non
+            return canBeHit;
+        }
     }
 }

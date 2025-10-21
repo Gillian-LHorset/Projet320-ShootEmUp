@@ -9,19 +9,24 @@ namespace Scramble
     {
         public static readonly int WIDTH = 100;
         public static readonly int HEIGHT = 40;
-        // De manière graphique
+        int countInCollision = 0;
+
         public void Render(BufferedGraphics drawingSpace)
         {
             MoveShip();
-            drawingSpace.Graphics.DrawImage(Resources.ship, X,Y,WIDTH, HEIGHT);
-            drawingSpace.Graphics.DrawString($"{this}", TextHelpers.drawFont, TextHelpers.writingBrush, X + 5, Y - 25);
-        }
 
-        // De manière textuelle
-        public override string ToString()
-        {
-            return $"{Name} ({((int)((double)_tanklevel / FULLTANK * 100)).ToString()}%)";
-        }
+            if (!PlayerCanBeHit())
+            {
+                countInCollision++;
+                if (countInCollision % 2 == 0)
+                {
+                    drawingSpace.Graphics.DrawImage(Resources.playerShip, X, Y, WIDTH, HEIGHT);
+                }
+            } else
+            {
+                drawingSpace.Graphics.DrawImage(Resources.playerShip, X, Y, WIDTH, HEIGHT);
+            }
 
+        }
     }
 }
