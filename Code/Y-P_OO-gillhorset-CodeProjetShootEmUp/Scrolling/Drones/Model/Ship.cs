@@ -44,7 +44,7 @@ namespace Scramble
         public bool haveShoot = false;
         public static bool isInLife = true;
 
-        public int[] ShipGround = new int[AirSpace.WIDTH / 10 + 1];
+        public static int[] ShipGround = new int[AirSpace.WIDTH / 10 + 1];
 
         // mise en place du cooldown de check de collision avec le sol
         private DateTime _lastCollisionCheck;

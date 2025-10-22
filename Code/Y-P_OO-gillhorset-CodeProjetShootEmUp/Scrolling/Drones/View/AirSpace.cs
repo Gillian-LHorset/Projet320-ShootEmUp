@@ -33,8 +33,8 @@ namespace Scramble
         List<Enemy> AllEnemysList = new List<Enemy>();
 
         // -- zone de test -- //
-        BasicEnemy aEnemy = new BasicEnemy(400, 400);
-        BasicEnemy anotherEnemy = new BasicEnemy(600, 600);
+        BasicEnemy aEnemy = new BasicEnemy(1000, 400);
+        BasicEnemy anotherEnemy = new BasicEnemy(1200, HEIGHT);
         HealItem aHealItem = new HealItem(100, 100);
         // -- fin zone de test -- //
 
@@ -110,7 +110,7 @@ namespace Scramble
                 {
                     ground[i - 1] = ground[i];
                     ground[ground.Length - 1] = ground[ground.Length - 2] + GlobalHelpers.alea.Next(0, 7) - 3;
-                    ship.ShipGround[i] = ground[i];
+                    Ship.ShipGround[i] = ground[i];
                 }
             }
 
@@ -136,6 +136,7 @@ namespace Scramble
             {
                 foreach (var aEnemy in AllEnemysList.ToList())
                 {
+                    aEnemy.EnemyMove();
                     aEnemy.Render(airspace);
                 }
             }
@@ -289,7 +290,6 @@ namespace Scramble
                             if (enemy.healPoint > 1)
                             {
                                 enemy.healPoint--;
-                                shoots.Remove(shoot);
                             } 
                             else
                             {
@@ -302,6 +302,7 @@ namespace Scramble
 
                                 enemys.Remove(enemy);                                
                             }
+                            shoots.Remove(shoot);
                         }
                     }
                 }

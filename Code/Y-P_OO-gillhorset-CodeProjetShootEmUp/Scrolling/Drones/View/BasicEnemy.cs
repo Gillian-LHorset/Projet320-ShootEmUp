@@ -13,7 +13,7 @@ namespace Scramble
         public override void Render(BufferedGraphics drawingSpace)
         {
             drawingSpace.Graphics.DrawImage(Resources.BasicEnemy, X, Y, WIDTH, HEIGHT);
-            HealBar.DisplayHealBar(drawingSpace, X, Y, WIDTH, healPoint, healPointMax);
+            HealBar.DisplayHealBar(drawingSpace, X, Y, WIDTH, healPoint, HEALPOINTMAX);
         }
     }
 }
