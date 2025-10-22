@@ -1,6 +1,7 @@
 using Scramble.Properties;
 using System;
 using System.Diagnostics;
+using System.Runtime.InteropServices.JavaScript;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Header;
 
 namespace Scramble
@@ -67,7 +68,7 @@ namespace Scramble
             healItems.Add(aHealItem);
             AllEnemysList.Add(aEnemy);
             AllEnemysList.Add(anotherEnemy);
-        // -- fin zone de test -- //
+            // -- fin zone de test -- //
 
             this.KeyPreview = true; // Ensures the form captures key events before child controls
             this.KeyDown += AirSpace_KeyDown;
@@ -160,7 +161,7 @@ namespace Scramble
                     CheckEnemyShootCollisionWhithPlayer(ship, aEnemy.enemyShoots);
                 }
             }
-
+            CheckPlayerShootCollisionWhithEnemys(AllEnemysList, ship.playerShoots);
 
             //foreach (var aEnemy in Enemys.ToList())
             //{
@@ -282,5 +283,31 @@ namespace Scramble
                 }
             }
         }
+
+        public void CheckPlayerShootCollisionWhithEnemys(List<Enemy> enemys, List<Shoot> shoots)
+        {
+            foreach (Shoot shoot in shoots.ToList())
+            {
+                if (shoot.IsAPlayerShoot == true)
+                {
+                    foreach (Enemy enemy in enemys.ToList())
+                    {
+                        if (enemy.enemyRectCollision.IntersectsWith(shoot.ShootRectCollision))
+                        {
+                            if (enemy.healPoint > 1)
+                            {
+                                enemy.healPoint--;
+                                shoots.Remove(shoot);
+                            } 
+                            else
+                            {
+                                enemys.Remove(enemy);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
     }
 }

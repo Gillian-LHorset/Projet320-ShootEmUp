@@ -11,10 +11,9 @@ namespace Scramble
     public partial class BasicEnemy : Enemy
     {
         readonly int healPointMax = 3;
-        int healPoint = 3;
-            public BasicEnemy(int x, int y) : base(x, y)
+        public BasicEnemy(int x, int y) : base(x, y)
         {
-                    
+            healPoint = 3;
         }
 
     }

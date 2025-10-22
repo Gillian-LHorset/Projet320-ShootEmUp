@@ -14,6 +14,7 @@ namespace Scramble
         public readonly int WIDTH = 39;
         public readonly int HEIGHT = 54;
 
+        public int healPoint;
 
         public Rectangle enemyRectCollision;
 
