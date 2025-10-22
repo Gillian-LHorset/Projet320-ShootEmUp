@@ -27,7 +27,8 @@ namespace Scramble
 
         
 
-        List<BasicEnemy> Enemys = new List<BasicEnemy>();
+
+        List<Enemy> AllEnemysList = new List<Enemy>();
 
         // -- zone de test -- //
         BasicEnemy aEnemy = new BasicEnemy(400, 400);
@@ -63,8 +64,8 @@ namespace Scramble
 
             // -- zone de test -- //
             healItems.Add(aHealItem);
-            Enemys.Add(aEnemy);
-            Enemys.Add(anotherEnemy);
+            AllEnemysList.Add(aEnemy);
+            AllEnemysList.Add(anotherEnemy);
         // -- fin zone de test -- //
 
             this.KeyPreview = true; // Ensures the form captures key events before child controls
@@ -87,12 +88,14 @@ namespace Scramble
             //            airspace.Graphics.FillRectangle(starBrush, new Rectangle(i * 10, j * 10, 10, 10));
             //    }
             //}
+
+            // couleur de fond du niveau
             airspace.Graphics.Clear(Color.AliceBlue);
 
-            // draw ships
-            
+            // va afficher et faire bouger le joueur
             ship.Render(airspace);
             
+            // systeme de génération du sol
             for (int i = 0; i < ground.Length; i++)
             {
                 airspace.Graphics.FillRectangle(groundBrush, new Rectangle(i * 10-scrollSmoother, HEIGHT - ground[i], 10, ground[i]));
@@ -109,18 +112,15 @@ namespace Scramble
                 }
             }
 
-
+            // va déplacer les tirs du joueur
             Shoot.ShootMove(ship.playerShoots);
-            //foreach (var shoot in ship.playerShoots.ToList())
-            //{
-            //    shoot.Render(airspace, ship.playerShoots);
-            //}
+
             for (int i = ship.playerShoots.Count - 1; i >= 0; i--)
             {
                 ship.playerShoots[i].Render(airspace, ship.playerShoots);
             }
-            // draw ship healbar
-            //////Ship.HealBar(airspace, ship.X, ship.Y - 20, ship.healPoint);
+
+
             if (healItems.Count > 0)
             {
                 foreach (var aHealItem in healItems.ToList())
@@ -129,13 +129,20 @@ namespace Scramble
                 }
             }
 
-            if (Enemys.Count > 0)
+            // affiche tous les enemies présent dans la liste AllEnemysList
+            if (AllEnemysList.Count > 0)
             {
-                foreach (var aEnemy in Enemys.ToList())
+                foreach (var aEnemy in AllEnemysList.ToList())
                 {
                     aEnemy.Render(airspace);
                 }
             }
+
+            // va verifier si le joueur entre en colision avec un enemie
+            CheckEnemyCollision(ship, AllEnemysList);
+
+            // va verifier si le joueur entre en colision avec un pack de soin
+            CheckHealItemCollision();
 
             //foreach (var aEnemy in Enemys.ToList())
             //{
@@ -147,13 +154,13 @@ namespace Scramble
             //    }
             //}
 
-            for (int i = Enemys.Count - 1; i >= 0; i--)
+            for (int i = AllEnemysList.Count - 1; i >= 0; i--)
             {
-                var aEnemy = Enemys[i];
+                var aEnemy = AllEnemysList[i];
                 aEnemy.EnemyShoot();
                 Shoot.ShootMove(aEnemy.enemyShoots);
 
-                // Boucle pour les tirs de l'ennemi
+                // Boucle pour afficher les tirs de l'ennemi
                 for (int j = aEnemy.enemyShoots.Count - 1; j >= 0; j--)
                 {
                     var shoot = aEnemy.enemyShoots[j];
@@ -161,7 +168,7 @@ namespace Scramble
                 }
             }
 
-            CheckHealItemCollision();
+
             if (Ship.isInLife)
             {
                 airspace.Render();
@@ -169,8 +176,6 @@ namespace Scramble
             GC.Collect();
 
         }
-
-        public static bool collisionTest;
 
         // Calcul du nouvel état après que 'interval' millisecondes se sont écoulées
         private void Update(int interval)
@@ -249,6 +254,17 @@ namespace Scramble
                 }
             }
             isHealItemShipCollision = false;
+        }
+
+        public void CheckEnemyCollision(Ship ship, List<Enemy> enemys)
+        {
+            foreach (Enemy enemy in enemys)
+            {
+                if (ship.shipRectCollision.IntersectsWith(enemy.enemyRectCollision) && ship.PlayerCanBeHit())
+                {
+                    ship.PlayerHitIsNow();
+                }
+            }
         }
 
     }

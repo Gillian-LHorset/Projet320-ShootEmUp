@@ -9,7 +9,7 @@ namespace Scramble
 {
     public partial class Enemy
     {
-        public void Render(BufferedGraphics drawingSpace)
+        public virtual void Render(BufferedGraphics drawingSpace)
         {
             try
             {
@@ -20,5 +20,6 @@ namespace Scramble
             Console.WriteLine("L'erreur est : ",ex.Message);
             }
         }
+
     }
 }

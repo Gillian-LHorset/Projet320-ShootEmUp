@@ -14,6 +14,9 @@ namespace Scramble
         public readonly int WIDTH = 39;
         public readonly int HEIGHT = 54;
 
+
+        public Rectangle enemyRectCollision;
+
         private DateTime _lastEnemyBulletShoot;
         private TimeSpan _enemyShootCooldown = TimeSpan.FromSeconds(1.5);
 
@@ -22,6 +25,8 @@ namespace Scramble
         public Enemy(int x, int y) { 
             X = x;
             Y = y;
+
+            enemyRectCollision = new Rectangle(x, y, WIDTH, HEIGHT);
         }
 
         public void EnemyShoot()
