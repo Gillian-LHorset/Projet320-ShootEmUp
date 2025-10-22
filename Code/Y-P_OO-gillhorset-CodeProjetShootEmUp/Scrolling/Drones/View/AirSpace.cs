@@ -166,6 +166,7 @@ namespace Scramble
             {
                 airspace.Render();
             }
+            GC.Collect();
 
         }
 
