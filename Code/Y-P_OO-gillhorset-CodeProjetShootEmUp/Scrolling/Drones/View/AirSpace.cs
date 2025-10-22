@@ -27,11 +27,11 @@ namespace Scramble
 
         
 
-        List<Enemy> Enemys = new List<Enemy>();
+        List<BasicEnemy> Enemys = new List<BasicEnemy>();
 
         // -- zone de test -- //
-        Enemy aEnemy = new Enemy(400, 400);
-        Enemy anotherEnemy = new Enemy(600, 600);
+        BasicEnemy aEnemy = new BasicEnemy(400, 400);
+        BasicEnemy anotherEnemy = new BasicEnemy(600, 600);
         HealItem aHealItem = new HealItem(100, 100);
         // -- fin zone de test -- //
 
@@ -120,7 +120,7 @@ namespace Scramble
                 ship.playerShoots[i].Render(airspace, ship.playerShoots);
             }
             // draw ship healbar
-            Ship.HealBar(airspace, ship.X, ship.Y - 20, ship.healPoint);
+            //////Ship.HealBar(airspace, ship.X, ship.Y - 20, ship.healPoint);
             if (healItems.Count > 0)
             {
                 foreach (var aHealItem in healItems.ToList())

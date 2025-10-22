@@ -8,8 +8,8 @@ namespace Scramble
 {    
     public partial class Enemy
     {
-        private int _x;
-        private int _y;
+        public int X;
+        public int Y;
 
         public readonly int WIDTH = 39;
         public readonly int HEIGHT = 54;
@@ -19,16 +19,16 @@ namespace Scramble
 
         public List<Shoot> enemyShoots = new List<Shoot>();
 
-        public Enemy(int X, int Y) { 
-            _x = X;
-            _y = Y;
+        public Enemy(int x, int y) { 
+            X = x;
+            Y = y;
         }
 
         public void EnemyShoot()
         {
             if (DateTime.Now - _lastEnemyBulletShoot >= _enemyShootCooldown)
             {
-                Shoot aEnemyShoot = new Shoot(_x, _y + HEIGHT / 2, false);
+                Shoot aEnemyShoot = new Shoot(X, Y + HEIGHT / 2, false);
                 enemyShoots.Add(aEnemyShoot);
                 this._lastEnemyBulletShoot = DateTime.Now;
             }

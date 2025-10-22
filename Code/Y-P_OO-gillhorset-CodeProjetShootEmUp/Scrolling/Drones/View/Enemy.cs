@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+// classe Inutile et devant être détruite a terme
 namespace Scramble
 {
     public partial class Enemy
@@ -13,7 +13,7 @@ namespace Scramble
         {
             try
             {
-                drawingSpace.Graphics.DrawImage(Resources.BasicEnemy, _x, _y, WIDTH, HEIGHT);
+                drawingSpace.Graphics.DrawImage(Resources.ship, X, Y, WIDTH, HEIGHT);
 
             }
             catch (Exception ex) { 
