@@ -40,5 +40,10 @@ namespace Scramble
             }
         }
 
+        public void EnemyMove()
+        {
+
+        }
+
     }
 }

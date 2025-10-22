@@ -144,7 +144,7 @@ namespace Scramble
             CheckEnemyCollision(ship, AllEnemysList);
 
             // va verifier si le joueur entre en colision avec un pack de soin
-            CheckHealItemCollision();
+            CheckHealItemCollision(healItems);
 
             foreach (var aEnemy in AllEnemysList.ToList())
             {
@@ -240,25 +240,17 @@ namespace Scramble
             }
         }
 
-        public void CheckHealItemCollision()
+        public void CheckHealItemCollision(List<HealItem> healItems)
         {
             foreach (var aHealItem in healItems.ToList())
             {
                 isHealItemShipCollision = ship.shipRectCollision.IntersectsWith(aHealItem.healItemRectCollision);
-                if (isHealItemShipCollision)
-                {
-                    break;
-                }
-            }
-            if (isHealItemShipCollision)
-            {
-                if (ship.healPoint < 5)
+                if (isHealItemShipCollision && ship.healPoint < 5)
                 {
                     ship.healPoint++;
                     healItems.Remove(aHealItem);
                 }
             }
-            isHealItemShipCollision = false;
         }
 
         public void CheckEnemyCollision(Ship ship, List<Enemy> enemys)
@@ -301,7 +293,14 @@ namespace Scramble
                             } 
                             else
                             {
-                                enemys.Remove(enemy);
+                                // à sa mort, un enemie à une chance sur 20 de lacher un item de soin
+                                if (GlobalHelpers.alea.Next(19) == 0)
+                                {
+                                    HealItem enemyDropHealItem = new HealItem(enemy.X, enemy.Y);
+                                    healItems.Add(enemyDropHealItem);
+                                }
+
+                                enemys.Remove(enemy);                                
                             }
                         }
                     }
