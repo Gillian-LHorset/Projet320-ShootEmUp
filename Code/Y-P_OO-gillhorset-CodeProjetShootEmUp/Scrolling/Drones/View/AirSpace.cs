@@ -273,11 +273,12 @@ namespace Scramble
 
         public void CheckEnemyShootCollisionWhithPlayer(Ship ship, List<Shoot> shoots)
         {
-            foreach (Shoot shoot in shoots)
+            foreach (Shoot shoot in shoots.ToList())
             {
                 if (shoot.IsAPlayerShoot == false && ship.shipRectCollision.IntersectsWith(shoot.ShootRectCollision) && ship.PlayerCanBeHit())
                 {
                     ship.PlayerHitIsNow();
+                    shoots.Remove(shoot);
                 }
             }
         }
