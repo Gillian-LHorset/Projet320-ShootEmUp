@@ -1,4 +1,5 @@
 using Scramble.Properties;
+using System;
 using System.Diagnostics;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Header;
 
@@ -144,6 +145,23 @@ namespace Scramble
             // va verifier si le joueur entre en colision avec un pack de soin
             CheckHealItemCollision();
 
+            foreach (var aEnemy in AllEnemysList.ToList())
+            {
+                aEnemy.EnemyShoot();
+                Shoot.ShootMove(aEnemy.enemyShoots);
+
+                // Boucle pour afficher les tirs de l'ennemi
+                
+                foreach (var shoot in aEnemy.enemyShoots.ToList())
+                {
+                    shoot.Render(airspace, aEnemy.enemyShoots);
+
+                    // vérifie si un tir enemy touche le jouer
+                    CheckEnemyShootCollisionWhithPlayer(ship, aEnemy.enemyShoots);
+                }
+            }
+
+
             //foreach (var aEnemy in Enemys.ToList())
             //{
             //    aEnemy.EnemyShoot();
@@ -153,20 +171,6 @@ namespace Scramble
             //        shoot.Render(airspace, aEnemy.enemyShoots);
             //    }
             //}
-
-            for (int i = AllEnemysList.Count - 1; i >= 0; i--)
-            {
-                var aEnemy = AllEnemysList[i];
-                aEnemy.EnemyShoot();
-                Shoot.ShootMove(aEnemy.enemyShoots);
-
-                // Boucle pour afficher les tirs de l'ennemi
-                for (int j = aEnemy.enemyShoots.Count - 1; j >= 0; j--)
-                {
-                    var shoot = aEnemy.enemyShoots[j];
-                    shoot.Render(airspace, aEnemy.enemyShoots);
-                }
-            }
 
 
             if (Ship.isInLife)
@@ -267,5 +271,15 @@ namespace Scramble
             }
         }
 
+        public void CheckEnemyShootCollisionWhithPlayer(Ship ship, List<Shoot> shoots)
+        {
+            foreach (Shoot shoot in shoots)
+            {
+                if (shoot.IsAPlayerShoot == false && ship.shipRectCollision.IntersectsWith(shoot.ShootRectCollision) && ship.PlayerCanBeHit())
+                {
+                    ship.PlayerHitIsNow();
+                }
+            }
+        }
     }
 }

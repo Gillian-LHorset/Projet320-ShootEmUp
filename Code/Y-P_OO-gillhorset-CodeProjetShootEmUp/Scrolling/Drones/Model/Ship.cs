@@ -76,7 +76,7 @@ namespace Scramble
                 if (_goDownBool)
                 {
                     if (Ship.HEIGHT + _y + 30 < AirSpace.HEIGHT - ShipGround[_x / 10])  
-                        // position x du vaisseau entre crochet
+                        // position _x du vaisseau entre crochet
                         // si la hauteur de la position du vaisseau et sa taille sont superieur à la hauteur de l'écran moins la hauteur du sol
                     {
                         isOkey = true;

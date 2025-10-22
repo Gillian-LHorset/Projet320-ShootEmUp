@@ -12,8 +12,10 @@ namespace Scramble
         public int _x;
         public int _y;
 
-        private bool _isAPlayerShoot;
-        
+        public bool IsAPlayerShoot;
+
+        public Rectangle ShootRectCollision;
+
         public readonly int WIDTH = 64;
         private readonly int HEIGHT = 8;
 
@@ -21,7 +23,9 @@ namespace Scramble
         {
             _x = X;
             _y = Y;
-            _isAPlayerShoot = isAPlayerShoot;
+            IsAPlayerShoot = isAPlayerShoot;
+
+            ShootRectCollision = new Rectangle(_x, _y, WIDTH, HEIGHT);
         }
 
         public int shootX { get { return _x; } set { _x = value; } }
@@ -33,7 +37,7 @@ namespace Scramble
             {
                 foreach (var shoot in shoots.ToList())
                 {
-                    if (shoot._isAPlayerShoot)
+                    if (shoot.IsAPlayerShoot)
                     // si le tir est tiré par le joueur
                     {
                         // le tir va se déplacer de gauche a droite
@@ -44,6 +48,7 @@ namespace Scramble
                         // il se déplacera de droite à gauche
                         shoot._x -= 30;
                     }
+                    shoot.ShootRectCollision.X = shoot._x;
                 }
             }
         }
