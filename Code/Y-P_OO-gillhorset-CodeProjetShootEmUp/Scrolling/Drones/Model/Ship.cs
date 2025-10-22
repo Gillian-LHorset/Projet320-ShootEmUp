@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using Scramble.View;
+using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Header;
 
 namespace Scramble
@@ -21,7 +22,6 @@ namespace Scramble
         public int X { get { return _x; } set { _x = value; } }
         public int Y { get { return _y;} set { _y = value; } }
 
-
         // Cette méthode calcule le nouvel état dans lequel le ship se trouve après
         // que 'interval' millisecondes se sont écoulées
         public bool GoUp { get { return _goUpBool; } set { _goUpBool = value; } }
@@ -34,7 +34,7 @@ namespace Scramble
         private bool _goDownBool;
         private bool _goRightBool;
 
-
+        public readonly int MaxHealPoint = 5;
         public int healPoint = 5;
 
         public bool isShooting = false;
@@ -53,29 +53,6 @@ namespace Scramble
         // mise en place du cooldown de tire
         private DateTime _lastBulletShoot;
         private TimeSpan _shootCooldown = TimeSpan.FromSeconds(0.4);
-
-        public static void HealBar(BufferedGraphics airspace, int x, int y, int healPoint)
-        {
-            int barWidth = Ship.WIDTH - 20;
-            int barHeight = 5;
-            // va center la barre sur le vaisseau
-            x += 10;
-
-            Brush healBarBrush = new SolidBrush(Color.Red);
-            Pen aroundHealBarPen = new Pen(Color.Black);
-            Brush decressesHealBarBrush = new SolidBrush(Color.Gray);
-
-            airspace.Graphics.FillRectangle(decressesHealBarBrush, new Rectangle    (x,y, barWidth, barHeight));
-
-            // zone rouge indiquant la vie du joueur
-            // sa taille est relavite a healPoint du joueur pour donner une indication de manière graphique
-            airspace.Graphics.FillRectangle(healBarBrush, new Rectangle             (x,y, (barWidth / 5) * healPoint, barHeight));
-            airspace.Graphics.DrawRectangle(aroundHealBarPen, new Rectangle         (x,y, barWidth, barHeight));
-            if (healPoint < 1)
-            {
-                isInLife = false;
-            }
-        }
         public void MoveShip()
         {
 

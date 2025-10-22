@@ -1,5 +1,6 @@
 ﻿using Scramble.Helpers;
 using Scramble.Properties;
+using Scramble.View;
 
 namespace Scramble
 {
@@ -27,6 +28,7 @@ namespace Scramble
                 drawingSpace.Graphics.DrawImage(Resources.playerShip, X, Y, WIDTH, HEIGHT);
             }
 
+            HealBar.DisplayHealBar(drawingSpace, _x, _y, WIDTH, healPoint, MaxHealPoint);
         }
     }
 }
