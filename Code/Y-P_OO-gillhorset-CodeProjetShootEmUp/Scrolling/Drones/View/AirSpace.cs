@@ -25,9 +25,9 @@ namespace Scramble
         int scrollSmoother = 0;
 
         List<HealItem> healItems  = new List<HealItem>();
-        bool isHealItemShipCollision;
+        private bool _isHealItemShipCollision;
 
-        
+        private bool _enemyDie;
 
 
         List<Enemy> AllEnemysList = new List<Enemy>();
@@ -101,7 +101,6 @@ namespace Scramble
             for (int i = 0; i < ground.Length; i++)
             {
                 airspace.Graphics.FillRectangle(groundBrush, new Rectangle(i * 10-scrollSmoother, HEIGHT - ground[i], 10, ground[i]));
-
             }
             scrollSmoother = (scrollSmoother + 5) % 10;
             if (scrollSmoother == 0)
@@ -114,13 +113,14 @@ namespace Scramble
                 }
             }
 
-            // va déplacer les tirs du joueur
-            Shoot.ShootMove(ship.playerShoots);
-
-            for (int i = ship.playerShoots.Count - 1; i >= 0; i--)
+            // déplace les tirs du joueur
+            foreach (var shoot in ship.playerShoots.ToList())
             {
-                ship.playerShoots[i].Render(airspace, ship.playerShoots);
+                shoot.ShootMove();
+                shoot.Render(airspace, ship.playerShoots);
             }
+
+            
 
 
             if (healItems.Count > 0)
@@ -149,31 +149,20 @@ namespace Scramble
 
             foreach (var aEnemy in AllEnemysList.ToList())
             {
-                aEnemy.EnemyShoot();
-                Shoot.ShootMove(aEnemy.enemyShoots);
+                aEnemy.EnemyShoot();                
 
                 // Boucle pour afficher les tirs de l'ennemi
                 
                 foreach (var shoot in aEnemy.enemyShoots.ToList())
                 {
                     shoot.Render(airspace, aEnemy.enemyShoots);
+                    shoot.ShootMove();
 
                     // vérifie si un tir enemy touche le jouer
                     CheckEnemyShootCollisionWhithPlayer(ship, aEnemy.enemyShoots);
                 }
             }
             CheckPlayerShootCollisionWhithEnemys(AllEnemysList, ship.playerShoots);
-
-            //foreach (var aEnemy in Enemys.ToList())
-            //{
-            //    aEnemy.EnemyShoot();
-            //    Shoot.ShootMove(aEnemy.enemyShoots);
-            //    foreach (var shoot in aEnemy.enemyShoots.ToList())
-            //    {
-            //        shoot.Render(airspace, aEnemy.enemyShoots);
-            //    }
-            //}
-
 
             if (Ship.isInLife)
             {
@@ -216,6 +205,9 @@ namespace Scramble
                 case Keys.Space:
                     ship.isShooting = true;
                     break;
+                case Keys.E:
+                    ship.isShootingMissile = true;
+                    break;
             }
         }
 
@@ -238,6 +230,9 @@ namespace Scramble
                 case Keys.Space:
                     ship.isShooting = false;
                     break;
+                case Keys.E:
+                    ship.isShootingMissile = false;
+                    break;
             }
         }
 
@@ -245,8 +240,8 @@ namespace Scramble
         {
             foreach (var aHealItem in healItems.ToList())
             {
-                isHealItemShipCollision = ship.shipRectCollision.IntersectsWith(aHealItem.healItemRectCollision);
-                if (isHealItemShipCollision && ship.healPoint < 5)
+                _isHealItemShipCollision = ship.shipRectCollision.IntersectsWith(aHealItem.healItemRectCollision);
+                if (_isHealItemShipCollision && ship.healPoint < 5)
                 {
                     ship.healPoint++;
                     healItems.Remove(aHealItem);
@@ -287,20 +282,40 @@ namespace Scramble
                     {
                         if (enemy.enemyRectCollision.IntersectsWith(shoot.ShootRectCollision))
                         {
-                            if (enemy.healPoint > 1)
+                            _enemyDie = false;
+                            if (shoot is Shoot)
                             {
-                                enemy.healPoint--;
-                            } 
-                            else
+                                if (enemy.healPoint > 1)
+                                {
+                                    enemy.healPoint--;
+                                } 
+                                else
+                                {
+                                    _enemyDie = true;
+                                }
+                            }
+
+                            if (shoot is Missile) {
+                                if (enemy.healPoint > 3)
+                                {
+                                    enemy.healPoint -= 3;
+                                }
+                                else
+                                {
+                                    _enemyDie = true;
+                                }
+                            }
+
+                            if (_enemyDie)
                             {
-                                // à sa mort, un enemie à une chance sur 20 de lacher un item de soin
+                                enemys.Remove(enemy);
+
                                 if (GlobalHelpers.alea.Next(19) == 0)
+                                // à sa mort, un enemie à une chance sur 20 de lacher un item de soin
                                 {
                                     HealItem enemyDropHealItem = new HealItem(enemy.X, enemy.Y);
                                     healItems.Add(enemyDropHealItem);
                                 }
-
-                                enemys.Remove(enemy);                                
                             }
                             shoots.Remove(shoot);
                         }

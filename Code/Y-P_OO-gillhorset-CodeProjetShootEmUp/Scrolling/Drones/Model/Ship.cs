@@ -1,4 +1,5 @@
 ﻿using Scramble.View;
+using System.Runtime.InteropServices.JavaScript;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Header;
 
@@ -37,6 +38,9 @@ namespace Scramble
         public readonly int MaxHealPoint = 5;
         public int healPoint = 5;
 
+        public int reserveMissile = 3;
+
+        public bool isShootingMissile = false;
         public bool isShooting = false;
         public List<Shoot> playerShoots = new List<Shoot>();
 
@@ -50,9 +54,14 @@ namespace Scramble
         private DateTime _lastCollisionCheck;
         private TimeSpan _collisionCooldown = TimeSpan.FromSeconds(2);
 
-        // mise en place du cooldown de tire
+        // mise en place du cooldown de tirs
         private DateTime _lastBulletShoot;
         private TimeSpan _shootCooldown = TimeSpan.FromSeconds(0.4);
+
+        // mise en place du cooldown de tirs de missile
+        private DateTime _lastMissileShoot;
+        private TimeSpan _missileCooldown = TimeSpan.FromSeconds(1);
+
         public void MoveShip()
         {
 
@@ -107,6 +116,10 @@ namespace Scramble
                         playerShoots.Add(aShoot);
                         _lastBulletShoot = DateTime.Now;
                     }
+                }
+                if (isShootingMissile)
+                {
+                    PlayerShootMissile();
                 }
             }
 
@@ -178,5 +191,25 @@ namespace Scramble
             // va retourner si le joueur peut être touché ou non
             return canBeHit;
         }
+        
+public void PlayerShootMissile()
+        {
+            if (isShootingMissile == true && DateTime.Now - _lastMissileShoot > _missileCooldown && reserveMissile > 0)
+            // si le joueur est en train de tirer,
+            //      que la date du dernier tir est supperieur au cooldown
+            //      et que le joueur a encore un missile
+            {
+                // ajoute un missile dans la liste des tirs du joueur
+                Missile aMissile = new Missile(_x, _y, true);
+                playerShoots.Add(aMissile);
+
+                // on retire de la reserve du joueur le missile qu'il vient de tirer
+                reserveMissile--;
+
+                // on définie que le dernier tir est maintenant
+                _lastMissileShoot = DateTime.Now;
+            }
+        }
+
     }
 }

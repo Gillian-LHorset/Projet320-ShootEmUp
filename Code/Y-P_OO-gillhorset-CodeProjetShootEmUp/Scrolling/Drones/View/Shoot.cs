@@ -7,7 +7,7 @@ namespace Scramble
     public partial class Shoot
     {
 
-        public void Render(BufferedGraphics drawingSpace, List<Shoot> shoots)
+        public virtual void Render(BufferedGraphics drawingSpace, List<Shoot> shoots)
         {
             foreach (var shoot in shoots.ToList())
             {
