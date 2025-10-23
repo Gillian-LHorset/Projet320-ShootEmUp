@@ -27,6 +27,8 @@ namespace Scramble
         List<HealItem> healItems  = new List<HealItem>();
         private bool _isHealItemShipCollision;
 
+        List<MissileItem> missileItems = new List<MissileItem>();
+
         private bool _enemyDie;
 
 
@@ -36,6 +38,8 @@ namespace Scramble
         BasicEnemy aEnemy = new BasicEnemy(1000, 400);
         BasicEnemy anotherEnemy = new BasicEnemy(1200, HEIGHT);
         HealItem aHealItem = new HealItem(100, 100);
+
+        MissileItem aMissileItem = new MissileItem(200, 100);
         // -- fin zone de test -- //
 
         // emplacement d'apparition des étoiles
@@ -66,6 +70,7 @@ namespace Scramble
 
             // -- zone de test -- //
             healItems.Add(aHealItem);
+            missileItems.Add(aMissileItem);
             AllEnemysList.Add(aEnemy);
             AllEnemysList.Add(anotherEnemy);
             // -- fin zone de test -- //
@@ -120,7 +125,10 @@ namespace Scramble
                 shoot.Render(airspace, ship.playerShoots);
             }
 
-            
+            foreach (var aMissileItem in missileItems)
+            {
+                aMissileItem.Render(airspace);
+            }
 
 
             if (healItems.Count > 0)
@@ -146,6 +154,9 @@ namespace Scramble
 
             // va verifier si le joueur entre en colision avec un pack de soin
             CheckHealItemCollision(healItems);
+
+            // vérifie la collision entre le joueur et les items récuperable de missiles
+            CheckMissileItemCollision(missileItems);
 
             foreach (var aEnemy in AllEnemysList.ToList())
             {
@@ -239,12 +250,31 @@ namespace Scramble
         public void CheckHealItemCollision(List<HealItem> healItems)
         {
             foreach (var aHealItem in healItems.ToList())
-            {
-                _isHealItemShipCollision = ship.shipRectCollision.IntersectsWith(aHealItem.healItemRectCollision);
-                if (_isHealItemShipCollision && ship.healPoint < 5)
+            {                
+                if (ship.shipRectCollision.IntersectsWith(aHealItem.healItemRectCollision) && ship.healPoint < 5)
                 {
                     ship.healPoint++;
                     healItems.Remove(aHealItem);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Cette méthode détecte si le joueur est en collision avec un item missile et icrémente sa reserve de missile si oui
+        /// </summary>
+        /// <param name="missileItems">Correspond à la liste de missile présent dans AirSpace</param>
+        public void CheckMissileItemCollision(List<MissileItem> missileItems)
+        {
+            foreach (var aMissileItem in missileItems.ToList())
+            {                
+                if (ship.shipRectCollision.IntersectsWith(aMissileItem.missileItemRectCollision))
+                // si le joueur entre en collision avec un item récuperable de missile
+                {
+                    // incrémente sa réserve de missile
+                    ship.reserveMissile++;
+
+                    // retire l'item du jeu
+                    missileItems.Remove(aMissileItem);
                 }
             }
         }
@@ -295,7 +325,8 @@ namespace Scramble
                                 }
                             }
 
-                            if (shoot is Missile) {
+                            if (shoot is Missile) 
+                            {
                                 if (enemy.healPoint > 3)
                                 {
                                     enemy.healPoint -= 3;
@@ -308,15 +339,23 @@ namespace Scramble
 
                             if (_enemyDie)
                             {
-                                enemys.Remove(enemy);
-
                                 if (GlobalHelpers.alea.Next(19) == 0)
                                 // à sa mort, un enemie à une chance sur 20 de lacher un item de soin
                                 {
                                     HealItem enemyDropHealItem = new HealItem(enemy.X, enemy.Y);
                                     healItems.Add(enemyDropHealItem);
                                 }
+
+                                if (GlobalHelpers.alea.Next(19) == 0)
+                                // à sa mort, un enemie à une chance sur 20 de lacher un item de soin
+                                {
+                                    MissileItem enemyDropMissileItem = new MissileItem(enemy.X, enemy.Y);
+                                    missileItems.Add(enemyDropMissileItem);
+                                }
+                                // supprime l'ennemie du jeu
+                                enemys.Remove(enemy);
                             }
+                            // le tir ayant touché, il est retirer du jeu
                             shoots.Remove(shoot);
                         }
                     }

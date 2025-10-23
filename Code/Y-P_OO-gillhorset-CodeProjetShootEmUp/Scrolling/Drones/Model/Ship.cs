@@ -200,7 +200,7 @@ public void PlayerShootMissile()
             //      et que le joueur a encore un missile
             {
                 // ajoute un missile dans la liste des tirs du joueur
-                Missile aMissile = new Missile(_x, _y, true);
+                Missile aMissile = new Missile(_x + WIDTH, _y, true);
                 playerShoots.Add(aMissile);
 
                 // on retire de la reserve du joueur le missile qu'il vient de tirer

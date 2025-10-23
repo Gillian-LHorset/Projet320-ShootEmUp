@@ -27,15 +27,7 @@ namespace Scramble
                 // le tir va se déplacer de gauche a droite
                 _x += 50;
             }
-            else
-            // si le tir est tiré par un ennemy
-            {
-                // il se déplacera de droite à gauche
-                _x -= 50;
-            }
             ShootRectCollision.X = _x;
-
-
         }
     }
 }
