@@ -73,6 +73,16 @@ namespace Scramble.Properties {
         /// <summary>
         ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap FrontEnemy {
+            get {
+                object obj = ResourceManager.GetObject("FrontEnemy", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap HealItem {
             get {
                 object obj = ResourceManager.GetObject("HealItem", resourceCulture);
@@ -126,6 +136,26 @@ namespace Scramble.Properties {
         internal static System.Drawing.Bitmap ship {
             get {
                 object obj = ResourceManager.GetObject("ship", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap SniperEnemy {
+            get {
+                object obj = ResourceManager.GetObject("SniperEnemy", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap TankEnemy {
+            get {
+                object obj = ResourceManager.GetObject("TankEnemy", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

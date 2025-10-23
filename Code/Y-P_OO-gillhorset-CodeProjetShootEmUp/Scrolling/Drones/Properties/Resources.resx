@@ -121,6 +121,9 @@
   <data name="BasicEnemy" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\BasicEnemy.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="FrontEnemy" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FrontEnemy.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="HealItem" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\healItem.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -138,5 +141,11 @@
   </data>
   <data name="ship" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ship.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SniperEnemy" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SniperEnemy.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TankEnemy" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TankEnemy.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>
