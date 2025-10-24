@@ -36,7 +36,7 @@ namespace Scramble
 
         // -- zone de test -- //
         BasicEnemy aEnemy = new BasicEnemy(1000, 400);
-        BasicEnemy anotherEnemy = new BasicEnemy(1200, HEIGHT);
+        FrontEnemy anotherEnemy = new FrontEnemy(500, 100);
         HealItem aHealItem = new HealItem(100, 100);
 
         MissileItem aMissileItem = new MissileItem(200, 100);
@@ -313,23 +313,23 @@ namespace Scramble
                         if (enemy.enemyRectCollision.IntersectsWith(shoot.ShootRectCollision))
                         {
                             _enemyDie = false;
-                            if (shoot is Shoot)
-                            {
-                                if (enemy.healPoint > 1)
-                                {
-                                    enemy.healPoint--;
-                                } 
-                                else
-                                {
-                                    _enemyDie = true;
-                                }
-                            }
+                            
 
                             if (shoot is Missile) 
                             {
                                 if (enemy.healPoint > 3)
                                 {
                                     enemy.healPoint -= 3;
+                                }
+                                else
+                                {
+                                    _enemyDie = true;
+                                }
+                            } else if (shoot is Shoot)
+                            {
+                                if (enemy.healPoint > 1)
+                                {
+                                    enemy.healPoint--;
                                 }
                                 else
                                 {
@@ -342,16 +342,21 @@ namespace Scramble
                                 if (GlobalHelpers.alea.Next(19) == 0)
                                 // à sa mort, un enemie à une chance sur 20 de lacher un item de soin
                                 {
+                                    // crée un item de soin
                                     HealItem enemyDropHealItem = new HealItem(enemy.X, enemy.Y);
+                                    // met un item de soin dans la liste prévu à cet effet
                                     healItems.Add(enemyDropHealItem);
                                 }
 
-                                if (GlobalHelpers.alea.Next(19) == 0)
+                                if (GlobalHelpers.alea.Next(15) == 0)
                                 // à sa mort, un enemie à une chance sur 20 de lacher un item de soin
                                 {
+                                    // crée un item rammasable missile
                                     MissileItem enemyDropMissileItem = new MissileItem(enemy.X, enemy.Y);
+                                    // met un item rammasable missile dans la liste prévu à cet effet
                                     missileItems.Add(enemyDropMissileItem);
                                 }
+
                                 // supprime l'ennemie du jeu
                                 enemys.Remove(enemy);
                             }

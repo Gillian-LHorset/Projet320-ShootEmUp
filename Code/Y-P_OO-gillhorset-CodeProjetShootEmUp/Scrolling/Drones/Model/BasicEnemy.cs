@@ -10,50 +10,55 @@ namespace Scramble
 {
     public partial class BasicEnemy : Enemy
     {
-        public new readonly int WIDTH = 39;
-        public new readonly int HEIGHT = 54;
 
         // définie la vitesse de déplacement de l'enemie
         private int _moveSpeed = 5;
 
-        private DateTime _lastEnemyBulletShoot;
-        private TimeSpan _enemyShootCooldown = TimeSpan.FromSeconds(1.5);
-
         // définie la vie maximum de l'ennemie
         readonly int HEALPOINTMAX = 3;
 
+        // variable utilisé pour définir à quel moment l'ennemie change de direction
         int moveTiming;
+
+        // défini la direction verticale que l'ennemie prend
         int moveDirection;
 
         // défini une position aléatoire pour éviter que tous les ennemies soit visuellement endroit horizontalement
-        int rndPositionX = GlobalHelpers.alea.Next(1300, (AirSpace.WIDTH - 30));
+        int rndPositionX = GlobalHelpers.alea.Next(1000, (AirSpace.WIDTH - 100));
 
         public BasicEnemy(int x, int y) : base(x, y)
         {
-            healPoint = 3;
-        }
-        public override void EnemyShoot()
-        {
-            if (DateTime.Now - _lastEnemyBulletShoot >= _enemyShootCooldown)
-            {
-                Shoot aEnemyShoot = new Shoot(X, Y + HEIGHT / 2, false);
-                enemyShoots.Add(aEnemyShoot);
-                this._lastEnemyBulletShoot = DateTime.Now;
-            }
+            // défini les points de vie de l'ennemie à sa création
+            healPoint = HEALPOINTMAX;
+
+            // défini la taille de l'ennemie
+            WIDTH = 39;
+            HEIGHT = 54;
+
+            // défini le cooldown de tir en modifiant la variable qui est présente dans la classe parent
+            _enemyShootCooldown = TimeSpan.FromSeconds(1.5);
+
+            // défini le rectangle de collision à la position et aux proportions de l'ennemie
+            enemyRectCollision = new Rectangle(x, y, WIDTH, HEIGHT);
         }
 
+        /// <summary>
+        /// Permet à l'ennemie de se déplacer sur la carte
+        /// </summary>
         public override void EnemyMove()
         {
-            // défini une position aléatoire pour éviter que tous les ennemies soit visuellement endroit horizontalement
-            // si l'ennemie est trop à gauche, il est ramené à droite de l'écran
+            // une position aléatoire est donné pour éviter que tous les ennemies soit visuellement endroit horizontalement
             if (X < rndPositionX)
+            // si l'ennemie est trop à gauche
             {
+                // le move speed de l'ennemie le ramenera à droite
                 X += _moveSpeed;
             }
 
-            // si l'ennemie est hors de l'écran horizontalement, il sera ramené dedans
             if (X+WIDTH > AirSpace.WIDTH)
+            // si l'ennemie est hors de l'écran à droite
             {
+                // son move speed le ramenera à gauche
                 X -= _moveSpeed;
             }
 
@@ -64,29 +69,34 @@ namespace Scramble
                     // crée une situation ou l'enemie à une chance sur deux de monter
                 {
                     if (Y - _moveSpeed > 20)
-                    // si la position de l'ennemie ne va pas être en dehors de l'écran, on le fait monté
+                    // si la position de l'ennemie ne va pas être en dehors de l'écran
                     {
+                        // fait monter l'ennemie
                         moveDirection = -5;
                     }
                 }
                 else if (Y + HEIGHT + _moveSpeed < AirSpace.HEIGHT - Ship.ShipGround[X / 10])
-                // si la poisition de l'ennemie n'est pas dans le sol après execution, alors on execute
+                // si la poisition de l'ennemie n'est pas dans le sol après execution
                 {
+                    // il peut bouger
                     moveDirection = 5;
                 } else
                 {
+                    // il ne peut pas bouger
                     moveDirection = 0;
                 }
             }                      
 
             if (Y + HEIGHT +10 > AirSpace.HEIGHT - Ship.ShipGround[X / 10])
-            // si l'ennemie est dans le sol, il sera remonter
+            // si l'ennemie est dans le sol
             {
+                // l'ennemie remonte
                 Y -= _moveSpeed;
             }
             if (Y < 0)
-            // si l'ennemie est hors de l'écran car il est trop haut, il sera ramené sur l'écran
+            // si l'ennemie est hors de l'écran car il est trop haut
             {
+                // il redescend
                 Y += _moveSpeed;
             }
 
