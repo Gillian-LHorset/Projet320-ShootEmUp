@@ -39,7 +39,7 @@ namespace Scramble
         /// <summary>
         /// Fait tirer l'ennemie sur AirSpace avec un temps entre 2 tirs
         /// </summary>
-        public void EnemyShoot()
+        public virtual void EnemyShoot()
         {
             if (DateTime.Now - _lastEnemyBulletShoot >= _enemyShootCooldown)
             // si le temps acctuel moins la dernière fois que l'ennemie à tiré est supperieur au temps entre deux tirs

@@ -37,6 +37,7 @@ namespace Scramble
         // -- zone de test -- //
         BasicEnemy aEnemy = new BasicEnemy(1000, 400);
         FrontEnemy anotherEnemy = new FrontEnemy(500, 100);
+        SniperEnemy againAnotherEnemy = new SniperEnemy(1000, 600);
         HealItem aHealItem = new HealItem(100, 100);
 
         MissileItem aMissileItem = new MissileItem(200, 100);
@@ -73,6 +74,7 @@ namespace Scramble
             missileItems.Add(aMissileItem);
             AllEnemysList.Add(aEnemy);
             AllEnemysList.Add(anotherEnemy);
+            AllEnemysList.Add(againAnotherEnemy);
             // -- fin zone de test -- //
 
             this.KeyPreview = true; // Ensures the form captures key events before child controls
@@ -157,6 +159,9 @@ namespace Scramble
 
             // vérifie la collision entre le joueur et les items récuperable de missiles
             CheckMissileItemCollision(missileItems);
+
+            //
+            CheckSniperShootCollision();
 
             foreach (var aEnemy in AllEnemysList.ToList())
             {
@@ -368,5 +373,26 @@ namespace Scramble
             }
         }
 
+        /// <summary>
+        /// Méthode verifiant spécifiquement les tirs des ennemies de type SniperEnemy
+        /// </summary>
+        public void CheckSniperShootCollision()
+        {            
+            foreach (var aEnemy in AllEnemysList)
+            // recherche dans toute la liste d'ennemies présent dans AirSpace
+            {
+                if (aEnemy.GetType() == typeof(SniperEnemy))
+                // si l'ennemie est de type SniperEnemy
+                {
+                    if (ship.shipRectCollision.IntersectsWith(againAnotherEnemy.SniperShoot) && ship.PlayerCanBeHit())
+                    // si le rectangle de collision entre en contacte avec le rectangle de dégat de SniperShoot
+                    //      et que le joueur peut être touché
+                    {
+                        // le joueur est touché
+                        ship.PlayerHitIsNow();
+                    }
+                }
+            }
+        }
     }
 }

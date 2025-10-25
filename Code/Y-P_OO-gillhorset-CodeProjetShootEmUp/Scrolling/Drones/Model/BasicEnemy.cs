@@ -10,7 +10,6 @@ namespace Scramble
 {
     public partial class BasicEnemy : Enemy
     {
-
         // définie la vitesse de déplacement de l'enemie
         private int _moveSpeed = 5;
 
