@@ -54,7 +54,7 @@ namespace Scramble
                 X += _moveSpeed;
             }
 
-            if (X+WIDTH > AirSpace.WIDTH)
+            if (X+WIDTH > _rndPositionX)
             // si l'ennemie est hors de l'écran à droite
             {
                 // son move speed le ramenera à gauche
