@@ -8,7 +8,8 @@ namespace Scramble
     // Cette partie de la classe ship définit ce qu'est un ship par un modèle numérique
     public partial class Ship
     {
-        private int _x;                                 // Position en X depuis la gauche de l'espace aérien
+        // Position en X depuis la gauche de l'espace aérien
+        private int _x;
         private int _y;
 
         public Rectangle shipRectCollision;

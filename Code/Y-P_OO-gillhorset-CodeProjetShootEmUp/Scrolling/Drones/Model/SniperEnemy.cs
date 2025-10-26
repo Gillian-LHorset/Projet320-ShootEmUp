@@ -52,7 +52,7 @@ namespace Scramble
             _enemyShootCooldown = TimeSpan.FromSeconds(2);
 
             // défini le rectangle de collision à la position et aux proportions de l'ennemie
-            enemyRectCollision = new Rectangle(x, y, WIDTH, HEIGHT);
+            EnemyRectCollision = new Rectangle(x, y, WIDTH, HEIGHT);
 
 
             // défini une position verticale aléatoire pour l'ennemie
@@ -170,8 +170,8 @@ namespace Scramble
             }
 
             // déplace le rectange de détection de collision avec le modele de l'ennemie
-            enemyRectCollision.X = X;
-            enemyRectCollision.Y = Y;
+            EnemyRectCollision.X = X;
+            EnemyRectCollision.Y = Y;
         }
 
     }

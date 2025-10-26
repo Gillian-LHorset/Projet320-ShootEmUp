@@ -14,16 +14,16 @@ namespace Scramble
         private int _moveSpeed = 5;
 
         // définie la vie maximum de l'ennemie
-        readonly int HEALPOINTMAX = 3;
+        public readonly int HEALPOINTMAX = 3;
 
         // variable utilisé pour définir à quel moment l'ennemie change de direction
-        int moveTiming;
+        private int _moveTiming;
 
         // défini la direction verticale que l'ennemie prend
-        int moveDirection;
+        private int _moveDirection;
 
         // défini une position aléatoire pour éviter que tous les ennemies soit visuellement endroit horizontalement
-        int rndPositionX = GlobalHelpers.alea.Next(1000, (AirSpace.WIDTH - 100));
+        private int _rndPositionX = GlobalHelpers.alea.Next(1000, (AirSpace.WIDTH - 100));
 
         public BasicEnemy(int x, int y) : base(x, y)
         {
@@ -38,7 +38,7 @@ namespace Scramble
             _enemyShootCooldown = TimeSpan.FromSeconds(1.5);
 
             // défini le rectangle de collision à la position et aux proportions de l'ennemie
-            enemyRectCollision = new Rectangle(x, y, WIDTH, HEIGHT);
+            EnemyRectCollision = new Rectangle(x, y, WIDTH, HEIGHT);
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace Scramble
         public override void EnemyMove()
         {
             // une position aléatoire est donné pour éviter que tous les ennemies soit visuellement endroit horizontalement
-            if (X < rndPositionX)
+            if (X < _rndPositionX)
             // si l'ennemie est trop à gauche
             {
                 // le move speed de l'ennemie le ramenera à droite
@@ -61,7 +61,7 @@ namespace Scramble
                 X -= _moveSpeed;
             }
 
-            if (moveTiming % 50 == 0)
+            if (_moveTiming % 50 == 0)
             // crée un situation ou l'enemie peut bouger toute les 50 itération de la méthode
             {
                 if (GlobalHelpers.alea.Next(50) < 25)
@@ -71,18 +71,18 @@ namespace Scramble
                     // si la position de l'ennemie ne va pas être en dehors de l'écran
                     {
                         // fait monter l'ennemie
-                        moveDirection = -5;
+                        _moveDirection = -5;
                     }
                 }
                 else if (Y + HEIGHT + _moveSpeed < AirSpace.HEIGHT - Ship.ShipGround[X / 10])
                 // si la poisition de l'ennemie n'est pas dans le sol après execution
                 {
                     // il peut bouger
-                    moveDirection = 5;
+                    _moveDirection = 5;
                 } else
                 {
                     // il ne peut pas bouger
-                    moveDirection = 0;
+                    _moveDirection = 0;
                 }
             }                      
 
@@ -100,14 +100,14 @@ namespace Scramble
             }
 
             // fait bouger l'ennemie
-            Y += moveDirection;
+            Y += _moveDirection;
 
             // compte le nombre d'itération de la méthode
-            moveTiming++;
+            _moveTiming++;
 
             // déplace le rectange de détection de collision avec le modele de l'ennemie
-            enemyRectCollision.X = X;
-            enemyRectCollision.Y = Y;
+            EnemyRectCollision.X = X;
+            EnemyRectCollision.Y = Y;
         }
     }
 }

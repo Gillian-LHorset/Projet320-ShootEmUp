@@ -16,7 +16,7 @@ namespace Scramble
             drawingSpace.Graphics.DrawImage(Resources.SniperEnemy, X, Y, WIDTH, HEIGHT);
             HealBar.DisplayHealBar(drawingSpace, X, Y, WIDTH, healPoint, HEALPOINTMAX);
 
-            // affiche le tir de l'ennemie sur AirSpace
+            // affiche le tir de l'ennemie sur AirSpace en se basant sut le rectangle créer lors du tir
             drawingSpace.Graphics.FillRectangle(ShootBrush, SniperShoot);            
         }
     }

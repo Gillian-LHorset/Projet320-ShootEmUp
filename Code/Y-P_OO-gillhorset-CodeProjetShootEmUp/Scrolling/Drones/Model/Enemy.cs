@@ -25,7 +25,7 @@ namespace Scramble
         protected TimeSpan _enemyShootCooldown;
 
         // rectangle servant à détecter les collisions
-        public Rectangle enemyRectCollision;
+        public Rectangle EnemyRectCollision;
 
         // liste des tirs de l'ennmie
         public List<Shoot> enemyShoots = new List<Shoot>();

@@ -25,7 +25,6 @@ namespace Scramble
         int scrollSmoother = 0;
 
         List<HealItem> healItems  = new List<HealItem>();
-        private bool _isHealItemShipCollision;
 
         List<MissileItem> missileItems = new List<MissileItem>();
 
@@ -75,6 +74,8 @@ namespace Scramble
             AllEnemysList.Add(aEnemy);
             AllEnemysList.Add(anotherEnemy);
             AllEnemysList.Add(againAnotherEnemy);
+            TankEnemy againAnotherEnemyPromiseItIsTheLast = new TankEnemy(ship, 900, 200);
+            AllEnemysList.Add(againAnotherEnemyPromiseItIsTheLast);
             // -- fin zone de test -- //
 
             this.KeyPreview = true; // Ensures the form captures key events before child controls
@@ -143,6 +144,7 @@ namespace Scramble
 
             // affiche tous les enemies présent dans la liste AllEnemysList
             if (AllEnemysList.Count > 0)
+            // si la liste d'ennemie est supperieur à 0
             {
                 foreach (var aEnemy in AllEnemysList.ToList())
                 {
@@ -288,7 +290,7 @@ namespace Scramble
         {
             foreach (Enemy enemy in enemys)
             {
-                if (ship.shipRectCollision.IntersectsWith(enemy.enemyRectCollision) && ship.PlayerCanBeHit())
+                if (ship.shipRectCollision.IntersectsWith(enemy.EnemyRectCollision) && ship.PlayerCanBeHit())
                 {
                     ship.PlayerHitIsNow();
                 }
@@ -307,42 +309,64 @@ namespace Scramble
             }
         }
 
+        /// <summary>
+        /// cette méthode gere les collisions entre les ennemy et les tirs du joueur
+        /// </summary>
+        /// <param name="enemys"></param>
+        /// <param name="shoots"></param>
         public void CheckPlayerShootCollisionWhithEnemys(List<Enemy> enemys, List<Shoot> shoots)
         {
             foreach (Shoot shoot in shoots.ToList())
             {
                 if (shoot.IsAPlayerShoot == true)
+                // si shoot à été tirer par le joueur
                 {
                     foreach (Enemy enemy in enemys.ToList())
                     {
-                        if (enemy.enemyRectCollision.IntersectsWith(shoot.ShootRectCollision))
+                        if (enemy.EnemyRectCollision.IntersectsWith(shoot.ShootRectCollision))
+                        // si le rectangle de collision de l'ennemie rentre en contacte avec le rectangle de collision du shoot
                         {
+                            // reset la variable qui dicte si l'ennemie est mort
                             _enemyDie = false;
-                            
 
-                            if (shoot is Missile) 
+
+                            if (shoot is Missile)
+                            // si le shoot est de la classe missile
                             {
                                 if (enemy.healPoint > 3)
+                                // si les points de vie de l'ennemie son supperieur à trois
                                 {
+                                    // retire 3 points de vie à l'ennemie
                                     enemy.healPoint -= 3;
                                 }
                                 else
                                 {
+                                    // indique que l'ennemie est mort
                                     _enemyDie = true;
                                 }
-                            } else if (shoot is Shoot)
+                            }
+                            else if (shoot is Shoot)
+                            // si le shoot est de la classe Shoot
                             {
-                                if (enemy.healPoint > 1)
-                                {
-                                    enemy.healPoint--;
-                                }
-                                else
-                                {
-                                    _enemyDie = true;
+                                if (!(enemy is TankEnemy))
+                                // si la classe de l'ennemie est différent de TankEnemy
+                                { 
+                                    if (enemy.healPoint > 1)
+                                    // si les point de vie de l'ennemie sont supperieur à un
+                                    {
+                                        // retire un point de vie à l'ennemie
+                                        enemy.healPoint--;
+                                    }
+                                    else
+                                    {
+                                        // indique que l'ennemie est mort
+                                        _enemyDie = true;
+                                    }
                                 }
                             }
 
                             if (_enemyDie)
+                            // si l'ennemie est mort
                             {
                                 if (GlobalHelpers.alea.Next(19) == 0)
                                 // à sa mort, un enemie à une chance sur 20 de lacher un item de soin
@@ -351,9 +375,7 @@ namespace Scramble
                                     HealItem enemyDropHealItem = new HealItem(enemy.X, enemy.Y);
                                     // met un item de soin dans la liste prévu à cet effet
                                     healItems.Add(enemyDropHealItem);
-                                }
-
-                                if (GlobalHelpers.alea.Next(15) == 0)
+                                } else if (GlobalHelpers.alea.Next(15) == 0)
                                 // à sa mort, un enemie à une chance sur 20 de lacher un item de soin
                                 {
                                     // crée un item rammasable missile
