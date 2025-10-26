@@ -16,6 +16,9 @@ namespace Scramble
         protected int WIDTH;
         protected int HEIGHT;
 
+        // rectangle de collision du tir de l'ennemie
+        public Rectangle SniperShoot;
+
         // Valeur, devant être redéfini, de la vie d'un ennemie
         public int healPoint;
 

@@ -33,14 +33,8 @@ namespace Scramble
 
         List<Enemy> AllEnemysList = new List<Enemy>();
 
-        // -- zone de test -- //
-        BasicEnemy aEnemy = new BasicEnemy(1000, 400);
-        FrontEnemy anotherEnemy = new FrontEnemy(500, 100);
-        SniperEnemy againAnotherEnemy = new SniperEnemy(1000, 600);
-        HealItem aHealItem = new HealItem(100, 100);
-
-        MissileItem aMissileItem = new MissileItem(200, 100);
-        // -- fin zone de test -- //
+        private DateTime _lastEnemySpawned;
+        private TimeSpan _enemySpawnCooldown;
 
         // emplacement d'apparition des étoiles
         //bool[,] stars = new bool[WIDTH/10, HEIGHT/10];
@@ -67,16 +61,6 @@ namespace Scramble
             //{
             //    stars[GlobalHelpers.alea.Next(0, WIDTH/10), GlobalHelpers.alea.Next(0, HEIGHT/10)] = true;
             //}
-
-            // -- zone de test -- //
-            healItems.Add(aHealItem);
-            missileItems.Add(aMissileItem);
-            AllEnemysList.Add(aEnemy);
-            AllEnemysList.Add(anotherEnemy);
-            AllEnemysList.Add(againAnotherEnemy);
-            TankEnemy againAnotherEnemyPromiseItIsTheLast = new TankEnemy(ship, 900, 200);
-            AllEnemysList.Add(againAnotherEnemyPromiseItIsTheLast);
-            // -- fin zone de test -- //
 
             this.KeyPreview = true; // Ensures the form captures key events before child controls
             this.KeyDown += AirSpace_KeyDown;
@@ -141,6 +125,8 @@ namespace Scramble
                     aHealItem.Render(airspace);
                 }
             }
+
+            SpawnRandomEnemy();
 
             // affiche tous les enemies présent dans la liste AllEnemysList
             if (AllEnemysList.Count > 0)
@@ -406,7 +392,7 @@ namespace Scramble
                 if (aEnemy.GetType() == typeof(SniperEnemy))
                 // si l'ennemie est de type SniperEnemy
                 {
-                    if (ship.shipRectCollision.IntersectsWith(againAnotherEnemy.SniperShoot) && ship.PlayerCanBeHit())
+                    if (ship.shipRectCollision.IntersectsWith(aEnemy.SniperShoot) && ship.PlayerCanBeHit())
                     // si le rectangle de collision entre en contacte avec le rectangle de dégat de SniperShoot
                     //      et que le joueur peut être touché
                     {
@@ -416,5 +402,45 @@ namespace Scramble
                 }
             }
         }
+
+        /// <summary>
+        /// fait apparaitre des ennemies aléatoir sur AirSpace à chaque fois que le temps donnée est passé
+        /// </summary>
+        public void SpawnRandomEnemy()
+        {
+            if (DateTime.Now - _lastEnemySpawned >= _enemySpawnCooldown)
+            // si le temps acctuel moins la dernière fois qu'un ennemie a spawn est supperieur au cooldown entre deux spawn
+            {
+                // fait spawn un ennemie au hazard
+                switch (GlobalHelpers.alea.Next(1, 5))
+                // génère un nombre aléatoire entre 1 et 4
+                {
+                    case 1:
+                        BasicEnemy aBasicEnemy = new BasicEnemy(AirSpace.WIDTH - 50, GlobalHelpers.alea.Next(0, 700));
+                        AllEnemysList.Add(aBasicEnemy);
+                        break;
+                    case 2:
+                        FrontEnemy aFrontEnemy = new FrontEnemy(AirSpace.WIDTH, GlobalHelpers.alea.Next(0, 700));
+                        AllEnemysList.Add(aFrontEnemy);
+                        break;
+                    case 3:
+                        SniperEnemy aSniperEnemy = new SniperEnemy(AirSpace.WIDTH, GlobalHelpers.alea.Next(0, 700));
+                        AllEnemysList.Add(aSniperEnemy);
+                        break;
+                    case 4:
+                        TankEnemy aTankEnemy = new TankEnemy(ship, AirSpace.WIDTH, GlobalHelpers.alea.Next(0, 700));
+                        AllEnemysList.Add(aTankEnemy);
+                        break;
+                }
+
+                // défini la derniere fois que un ennemie a spawn
+                _lastEnemySpawned = DateTime.Now;
+                // génère un cooldown aléatoire pour le prochain spawn d'ennemie
+                _enemySpawnCooldown = TimeSpan.FromSeconds(GlobalHelpers.alea.Next(6, 9));
+            }
+            
+
+        }
+
     }
 }

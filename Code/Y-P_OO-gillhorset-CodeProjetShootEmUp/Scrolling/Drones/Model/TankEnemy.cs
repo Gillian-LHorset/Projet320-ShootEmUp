@@ -70,7 +70,7 @@ namespace Scramble
             }
 
 
-
+            // fait déplacer le rectangle de collision au même endroit que le modele de l'ennemie
             EnemyRectCollision.X = X;
             EnemyRectCollision.Y = Y;
         }
