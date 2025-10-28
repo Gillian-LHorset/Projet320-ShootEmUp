@@ -19,9 +19,6 @@ namespace Scramble
         // temps que va rester le tir de l'ennemie à l'écran
         private TimeSpan _shootDisplayCooldown = TimeSpan.FromSeconds(0.6);
 
-        // rectangle de collision du tir de l'ennemie
-        public Rectangle SniperShoot;
-
         // taille verticale du tir de l'ennemie
         private int _laserHeight = 10;
         // position verticale du tir de l'ennemie
