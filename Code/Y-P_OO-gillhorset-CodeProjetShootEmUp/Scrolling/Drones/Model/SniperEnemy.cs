@@ -16,6 +16,7 @@ namespace Scramble
 
         // défini la dernière fois que l'ennemie à tiré
         private DateTime _lastEnemyBulletShoot;
+
         // temps que va rester le tir de l'ennemie à l'écran
         private TimeSpan _shootDisplayCooldown = TimeSpan.FromSeconds(0.6);
 
