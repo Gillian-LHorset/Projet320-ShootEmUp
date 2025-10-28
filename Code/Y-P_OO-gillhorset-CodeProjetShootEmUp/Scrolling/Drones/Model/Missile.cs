@@ -8,26 +8,31 @@ namespace Scramble
 {
     public partial class Missile : Shoot
     {
-
-        public new readonly int WIDTH = 44;
-        public readonly int HEIGHT = 26;
+        // écrase la taille définie par la classe partent
+        private readonly int _WIDTH = 44;
+        private readonly int _HEIGHT = 26;
         public Missile(int X, int Y, bool isAPlayerShoot) : base(X, Y, isAPlayerShoot)
         {
-            _x = X;
-            _y = Y;
+            shootX = X;
+            shootY = Y;
             IsAPlayerShoot = isAPlayerShoot;
 
-            ShootRectCollision = new Rectangle(_x, _y, WIDTH, HEIGHT);
+            ShootRectCollision = new Rectangle(shootX, shootY, _WIDTH, _HEIGHT);
         }
+
+        /// <summary>
+        /// fait déplacer le missile horizontalement sur AirSpace
+        /// </summary>
         public override void ShootMove()
         {
             if (IsAPlayerShoot)
             // si le tir est tiré par le joueur
             {
                 // le tir va se déplacer de gauche a droite
-                _x += 50;
+                shootX += 50;
             }
-            ShootRectCollision.X = _x;
+            // déplace le rectangle de collision en à l'endroit ou est le tir
+            ShootRectCollision.X = shootX;
         }
     }
 }

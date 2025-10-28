@@ -9,15 +9,19 @@ namespace Scramble
 {
     public partial class Shoot
     {
-        public int _x;
-        public int _y;
+        // position du tir
+        private int _x;
+        private int _y;
 
+        // défini si le tir viens du joueur
         public bool IsAPlayerShoot;
 
+        // rectangle ayant pour but de détecter les collision
         public Rectangle ShootRectCollision;
 
-        public readonly int WIDTH = 64;
-        private readonly int HEIGHT = 8;
+        // taille du tir
+        private readonly int _WIDTH = 64;
+        private readonly int _HEIGHT = 8;
 
         public Shoot (int X, int Y, bool isAPlayerShoot)
         {
@@ -25,7 +29,7 @@ namespace Scramble
             _y = Y;
             IsAPlayerShoot = isAPlayerShoot;
 
-            ShootRectCollision = new Rectangle(_x, _y, WIDTH, HEIGHT);
+            ShootRectCollision = new Rectangle(_x, _y, _WIDTH, _HEIGHT);
         }
 
         public int shootX { get { return _x; } set { _x = value; } }

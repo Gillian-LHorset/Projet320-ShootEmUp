@@ -28,17 +28,17 @@ namespace Scramble
         public BasicEnemy(int x, int y) : base(x, y)
         {
             // défini les points de vie de l'ennemie à sa création
-            healPoint = HEALPOINTMAX;
+            HealPoint = HEALPOINTMAX;
 
             // défini la taille de l'ennemie
-            WIDTH = 39;
-            HEIGHT = 54;
+            width = 39;
+            height = 54;
 
             // défini le cooldown de tir en modifiant la variable qui est présente dans la classe parent
-            _enemyShootCooldown = TimeSpan.FromSeconds(1.5);
+            enemyShootCooldown = TimeSpan.FromSeconds(1.5);
 
             // défini le rectangle de collision à la position et aux proportions de l'ennemie
-            EnemyRectCollision = new Rectangle(x, y, WIDTH, HEIGHT);
+            EnemyRectCollision = new Rectangle(x, y, width, height);
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace Scramble
                 X += _moveSpeed;
             }
 
-            if (X+WIDTH > _rndPositionX)
+            if (X+width > _rndPositionX)
             // si l'ennemie est hors de l'écran à droite
             {
                 // son move speed le ramenera à gauche
@@ -74,7 +74,7 @@ namespace Scramble
                         _moveDirection = -5;
                     }
                 }
-                else if (Y + HEIGHT + _moveSpeed < AirSpace.HEIGHT - Ship.ShipGround[X / 10])
+                else if (Y + height + _moveSpeed < AirSpace.HEIGHT - Ship.ShipGround[X / 10])
                 // si la poisition de l'ennemie n'est pas dans le sol après execution
                 {
                     // il peut bouger
@@ -86,7 +86,7 @@ namespace Scramble
                 }
             }                      
 
-            if (Y + HEIGHT +10 > AirSpace.HEIGHT - Ship.ShipGround[X / 10])
+            if (Y + height +10 > AirSpace.HEIGHT - Ship.ShipGround[X / 10])
             // si l'ennemie est dans le sol
             {
                 // l'ennemie remonte

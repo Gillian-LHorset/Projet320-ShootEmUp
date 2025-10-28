@@ -12,14 +12,16 @@ namespace Scramble
         private int _x;
         private int _y;
 
-        public Rectangle shipRectCollision;
+        // rectangle ayant pour but d'être utiliser lors de la verification des collisions
+        public Rectangle ShipRectCollision;
+
         // Constructeur
         public Ship(int x, int y)
         {
             _x = x;
             _y = y;
 
-            shipRectCollision = new Rectangle(_x, _y, WIDTH, HEIGHT);
+            ShipRectCollision = new Rectangle(_x, _y, WIDTH, HEIGHT);
         }
         public int X { get { return _x; } set { _x = value; } }
         public int Y { get { return _y;} set { _y = value; } }
@@ -36,19 +38,31 @@ namespace Scramble
         private bool _goDownBool;
         private bool _goRightBool;
 
+        // vie maximal du joueur
         public readonly int MaxHealPoint = 5;
-        public int healPoint = 5;
 
-        public int reserveMissile = 3;
+        // vie acctuel du joueur
+        public int HealPoint = 5;
 
-        public bool isShootingMissile = false;
-        public bool isShooting = false;
-        public List<Shoot> playerShoots = new List<Shoot>();
+        // défini le nombre de missile que le joueur peut encore tirer
+        public int ReserveMissile = 3;
 
-        public bool isOkey = false;
-        public bool haveShoot = false;
+        // défini quand le joueur tir
+        public bool IsShooting = false;
+
+        // défini quand le joueur tir un missile
+        public bool IsShootingMissile = false;
+
+        // liste des tirs du joueur
+        public List<Shoot> PlayerShoots = new List<Shoot>();
+
+        public bool IsOkey = false;
+        public bool HaveShoot = false;
+
+        // défini si le joueur est en vie
         public bool IsInLife = true;
 
+        // tableau contenant les emplacement du sol
         public static int[] ShipGround = new int[AirSpace.WIDTH / 10 + 1];
 
         // mise en place du cooldown de check de collision avec le sol
@@ -86,13 +100,13 @@ namespace Scramble
                     // position _x du vaisseau entre crochet
                     // si la hauteur de la position du vaisseau et sa taille sont superieur à la hauteur de l'écran moins la hauteur du sol
                 {
-                    isOkey = true;
+                    IsOkey = true;
                 }
                 else
                 {
-                    isOkey = false;
+                    IsOkey = false;
                 }
-                if (isOkey && _y < AirSpace.HEIGHT - Ship.HEIGHT)
+                if (IsOkey && _y < AirSpace.HEIGHT - Ship.HEIGHT)
                 {
                     _y += 15;
                 }
@@ -106,23 +120,27 @@ namespace Scramble
                 }
             }
 
-            if (isShooting)
+            if (IsShooting)
             {
                 if (DateTime.Now - _lastBulletShoot >= _shootCooldown)
+                // si le temps acctuel moins la dernière fois que le joueur à tiré est supperieur au temps entre deux tirs
                 {
+                    // ajoute un tir, à la position du joueur, dans sa liste de tirs
                     Shoot aShoot = new Shoot(_x + Ship.WIDTH, _y + Ship.HEIGHT / 2, true);
-                    playerShoots.Add(aShoot);
+                    PlayerShoots.Add(aShoot);
+
+                    // défini que la dernière fois qu'il a tirer est maintenant
                     _lastBulletShoot = DateTime.Now;
                 }
             }
-            if (isShootingMissile)
+            if (IsShootingMissile)
             {
                 PlayerShootMissile();
             }
             
-
-            shipRectCollision.X = _x;
-            shipRectCollision.Y = _y;
+            // défini le rectangle de collision aux positions du vaisseau
+            ShipRectCollision.X = _x;
+            ShipRectCollision.Y = _y;
         }
 
         /// <summary>
@@ -147,6 +165,7 @@ namespace Scramble
                 PlayerHitIsNow();
             }
             if (!PlayerCanBeHit())
+            // si le joueur ne peut pas être touché
             {
                 return false;
 
@@ -163,10 +182,12 @@ namespace Scramble
         {
             _lastCollisionCheck = DateTime.Now;
             // retire 1 point de vie au joueur   
-            healPoint--;
+            HealPoint--;
 
-            if (healPoint < 1)
+            if (HealPoint < 1)
+            // si les points de vie sont inferieur à 1
             {
+                // défini la mort du joueur
                 IsInLife = false;
             }
         }
@@ -195,19 +216,22 @@ namespace Scramble
             return canBeHit;
         }
         
-public void PlayerShootMissile()
+        /// <summary>
+        /// Le joueur tir un missile
+        /// </summary>
+        public void PlayerShootMissile()
         {
-            if (isShootingMissile == true && DateTime.Now - _lastMissileShoot > _missileCooldown && reserveMissile > 0)
+            if (IsShootingMissile == true && DateTime.Now - _lastMissileShoot > _missileCooldown && ReserveMissile > 0)
             // si le joueur est en train de tirer,
             //      que la date du dernier tir est supperieur au cooldown
             //      et que le joueur a encore un missile
             {
                 // ajoute un missile dans la liste des tirs du joueur
                 Missile aMissile = new Missile(_x + WIDTH, _y, true);
-                playerShoots.Add(aMissile);
+                PlayerShoots.Add(aMissile);
 
                 // on retire de la reserve du joueur le missile qu'il vient de tirer
-                reserveMissile--;
+                ReserveMissile--;
 
                 // on définie que le dernier tir est maintenant
                 _lastMissileShoot = DateTime.Now;

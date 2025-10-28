@@ -17,13 +17,10 @@ namespace Scramble
         // défini la dernière fois que l'ennemie à tiré
         private DateTime _lastEnemyBulletShoot;
 
-        // temps que va rester le tir de l'ennemie à l'écran
-        private TimeSpan _shootDisplayCooldown = TimeSpan.FromSeconds(0.6);
-
         // taille verticale du tir de l'ennemie
         private int _laserHeight = 10;
         // position verticale du tir de l'ennemie
-        protected int _laserYPosition = 100;
+        protected int laserYPosition = 100;
 
         // défini si l'ennemie peut tirer
         private bool _enemyCanShoot = false;
@@ -40,21 +37,21 @@ namespace Scramble
         public SniperEnemy(int x, int y) : base(x, y)
         {
             // défini les points de vie de l'ennemie à sa création
-            healPoint = HEALPOINTMAX;
+            HealPoint = HEALPOINTMAX;
 
             // défini la taille de l'ennemie
-            WIDTH = 50;
-            HEIGHT = 50;
+            width = 50;
+            height = 50;
 
             // défini le cooldown de tir en modifiant la variable qui est présente dans la classe parent
-            _enemyShootCooldown = TimeSpan.FromSeconds(2);
+            enemyShootCooldown = TimeSpan.FromSeconds(2);
 
             // défini le rectangle de collision à la position et aux proportions de l'ennemie
-            EnemyRectCollision = new Rectangle(x, y, WIDTH, HEIGHT);
+            EnemyRectCollision = new Rectangle(x, y, width, height);
 
 
             // défini une position verticale aléatoire pour l'ennemie
-            _rndPositionY = GlobalHelpers.alea.Next(20, AirSpace.HEIGHT - Ship.ShipGround[X / 10] + HEIGHT);
+            _rndPositionY = GlobalHelpers.alea.Next(20, AirSpace.HEIGHT - Ship.ShipGround[X / 10] + height);
         }
 
         /// <summary>
@@ -67,14 +64,14 @@ namespace Scramble
                 // la position de l'ennemie ne corresponds plus à la position défini
                 _isPositionValid = false;
 
-                if (DateTime.Now - _lastEnemyBulletShoot >= _enemyShootCooldown)
+                if (DateTime.Now - _lastEnemyBulletShoot >= enemyShootCooldown)
                 // si le temps acctuel moins la dernière fois que l'ennemie à tiré est supperieur au temps entre deux tirs
                 {
                     // défini la taille verticale du tir
                     _laserHeight = 10;
                     // défini la position verticale du tir
                     //      en se basant sur la position de l'ennemie, sa taille et la taille du laser pour centrer visuellement le tir sur l'ennemie
-                    _laserYPosition = Y + HEIGHT / 2 - _laserHeight / 2;
+                    laserYPosition = Y + height / 2 - _laserHeight / 2;
 
                     // défini que le dernier tir viens d'avoir lieu
                     _lastEnemyBulletShoot = DateTime.Now;
@@ -84,9 +81,9 @@ namespace Scramble
                 // si la taille du laser est plus grande que 0
                 {
                     // le rectangle de collision est redessiné
-                    SniperShoot = new Rectangle(0, _laserYPosition, X, _laserHeight);
+                    SniperShoot = new Rectangle(0, laserYPosition, X, _laserHeight);
                     // la position du laser est incrémenter pour rester centrer sur l'ennemie
-                    _laserYPosition++;
+                    laserYPosition++;
                     // réduit la taille du tir de l'ennemie
                     _laserHeight -= 2;
                 }
@@ -107,25 +104,25 @@ namespace Scramble
         /// </summary>
         public override void EnemyMove()
         {
-            if (X + WIDTH > AirSpace.WIDTH)
+            if (X + width > AirSpace.WIDTH)
             // si l'ennemie est hors de l'écran à droite
             {
                 // il se déplacera vers la gauche
                 X -= 10;
             }
 
-            if (X < AirSpace.WIDTH - WIDTH - 10)
+            if (X < AirSpace.WIDTH - width - 10)
             // si l'ennemie est trop à gauche
             {
                 // il se déplacera vers la droite
                 X += 10;
             }
 
-            if (Y + HEIGHT > AirSpace.HEIGHT - Ship.ShipGround[X / 10])
+            if (Y + height > AirSpace.HEIGHT - Ship.ShipGround[X / 10])
             // si la position de l'ennemie est dans le le sol
             {
                 // défini une position verticale aléatoire pour l'ennemie
-                _rndPositionY = GlobalHelpers.alea.Next(20, AirSpace.HEIGHT - Ship.ShipGround[X / 10] + HEIGHT);
+                _rndPositionY = GlobalHelpers.alea.Next(20, AirSpace.HEIGHT - Ship.ShipGround[X / 10] + height);
                 // l'ennemie n'est pas en position pour tirer
                 _isPositionValid = false;
             }
@@ -164,7 +161,7 @@ namespace Scramble
                 _enemyCanShoot = true;
 
                 // défini une nouvelle position verticale aléatoire pour l'ennemie
-                _rndPositionY = GlobalHelpers.alea.Next(20, AirSpace.HEIGHT - Ship.ShipGround[X / 10] + HEIGHT);
+                _rndPositionY = GlobalHelpers.alea.Next(20, AirSpace.HEIGHT - Ship.ShipGround[X / 10] + height);
             }
 
             // déplace le rectange de détection de collision avec le modele de l'ennemie

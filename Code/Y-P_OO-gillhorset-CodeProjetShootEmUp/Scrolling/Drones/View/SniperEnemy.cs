@@ -13,8 +13,10 @@ namespace Scramble
         Brush ShootBrush = new SolidBrush(Color.Red);
         public override void Render(BufferedGraphics drawingSpace)
         {
-            drawingSpace.Graphics.DrawImage(Resources.SniperEnemy, X, Y, WIDTH, HEIGHT);
-            HealBar.DisplayHealBar(drawingSpace, X, Y, WIDTH, healPoint, HEALPOINTMAX);
+            drawingSpace.Graphics.DrawImage(Resources.SniperEnemy, X, Y, width, height);
+
+            // affiche la bar de vie au dessus de lui
+            HealBar.DisplayHealBar(drawingSpace, X, Y, width, HealPoint, HEALPOINTMAX);
 
             // affiche le tir de l'ennemie sur AirSpace en se basant sut le rectangle créer lors du tir
             drawingSpace.Graphics.FillRectangle(ShootBrush, SniperShoot);            

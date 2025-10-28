@@ -12,8 +12,9 @@ namespace Scramble
     {
         public override void Render(BufferedGraphics drawingSpace)
         {
-            drawingSpace.Graphics.DrawImage(Resources.TankEnemy, X, Y, WIDTH, HEIGHT);
-            HealBar.DisplayHealBar(drawingSpace, X, Y, WIDTH, healPoint, HEALPOINTMAX);
+            drawingSpace.Graphics.DrawImage(Resources.TankEnemy, X, Y, width, height);
+            // affiche la bar de vie de l'ennemie au dessus de lui
+            HealBar.DisplayHealBar(drawingSpace, X, Y, width, HealPoint, HEALPOINTMAX);
         }
     }
 }

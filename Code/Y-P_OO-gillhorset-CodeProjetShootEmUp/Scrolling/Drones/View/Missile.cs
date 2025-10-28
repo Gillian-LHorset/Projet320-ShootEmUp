@@ -12,7 +12,7 @@ namespace Scramble
         public override void Render(BufferedGraphics drawingSpace, List<Shoot> shoots)
         {
             
-            drawingSpace.Graphics.DrawImage(Resources.Missile, _x, _y, WIDTH, HEIGHT);
+            drawingSpace.Graphics.DrawImage(Resources.Missile, shootX, shootY, _WIDTH, _HEIGHT);
             
         }
     }

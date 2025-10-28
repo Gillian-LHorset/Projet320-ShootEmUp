@@ -16,37 +16,30 @@ namespace Scramble
         public static readonly int HEIGHT = 900;
 
         // La flotte est l'ensemble des ships qui évoluent dans notre espace aérien
-        private Ship ship;
+        private Ship _ship;
 
         BufferedGraphicsContext currentContext;
         protected BufferedGraphics airspace;
         int[] ground = new int[WIDTH / 10+1];
         Brush groundBrush = new SolidBrush(Color.DarkGreen);
-        Brush starBrush = new SolidBrush(Color.White);
-        int scrollSmoother = 0;
+        private int _scrollSmoother = 0;
 
-        List<HealItem> healItems  = new List<HealItem>();
+        private List<HealItem> _healItems = new List<HealItem>();
 
-        List<MissileItem> missileItems = new List<MissileItem>();
+        private List<MissileItem> _missileItems = new List<MissileItem>();
 
         private bool _enemyDie;
 
-
         private int _timingExplosionPlayer;
 
-        private int _explosionPositionX;
-        private int _explosionPositionY;
+        private List<Enemy> _allEnemysList = new List<Enemy>();
 
-        List<Enemy> AllEnemysList = new List<Enemy>();
-
-        Brush fontBrush = new SolidBrush(Color.Black);
+        private Brush _fontBrush = new SolidBrush(Color.Black);
 
         private DateTime _lastEnemySpawned;
         private TimeSpan _enemySpawnCooldown;
 
-        // emplacement d'apparition des étoiles
-        //bool[,] stars = new bool[WIDTH/10, HEIGHT/10];
-
+        public static int ScorePoint;
 
         // Initialisation de l'espace aérien avec un certain nombre de ships
         public AirSpace(Ship ship)
@@ -57,18 +50,13 @@ namespace Scramble
             // Creates a BufferedGraphics instance associated with this form, and with
             // dimensions the same size as the drawing surface of the form.
             airspace = currentContext.Allocate(this.CreateGraphics(), this.DisplayRectangle);
-            this.ship = ship;
+            this._ship = ship;
             ground[0] = HEIGHT / 5;
             for (int i = 1; i < ground.Length; i++)
             {
                 ground[i] = ground[i-1] + GlobalHelpers.alea.Next(0, 7)-3;
             }
             ClientSize = new Size(WIDTH, HEIGHT);
-
-            //for (int i = 0; i < 100; i++)
-            //{
-            //    stars[GlobalHelpers.alea.Next(0, WIDTH/10), GlobalHelpers.alea.Next(0, HEIGHT/10)] = true;
-            //}
 
             this.KeyPreview = true; // Ensures the form captures key events before child controls
             this.KeyDown += AirSpace_KeyDown;
@@ -86,18 +74,15 @@ namespace Scramble
             // système s'affichage du sol
             for (int i = 0; i < ground.Length; i++)
             {
-                airspace.Graphics.FillRectangle(groundBrush, new Rectangle(i * 10 - scrollSmoother, HEIGHT - ground[i], 10, ground[i]));
-            }
-            
+                airspace.Graphics.FillRectangle(groundBrush, new Rectangle(i * 10 - _scrollSmoother, HEIGHT - ground[i], 10, ground[i]));
+            }            
 
-            if (ship.IsInLife)
+            if (_ship.IsInLife)
             // si le joueur est encore en vie
             {
-
-
                 // systeme de génération du sol
-                scrollSmoother = (scrollSmoother + 5) % 10;
-                if (scrollSmoother == 0)
+                _scrollSmoother = (_scrollSmoother + 5) % 10;
+                if (_scrollSmoother == 0)
                 {
                     for (int i = 1; i < ground.Length; i++)
                     {
@@ -108,17 +93,17 @@ namespace Scramble
                 }
 
                 // déplace les tirs du joueur
-                foreach (var shoot in ship.playerShoots.ToList())
+                foreach (Shoot shoot in _ship.PlayerShoots.ToList())
                 {
                     shoot.ShootMove();
-                    shoot.Render(airspace, ship.playerShoots);
+                    shoot.Render(airspace, _ship.PlayerShoots);
                 }
 
                 // affiche tous les enemies présent dans la liste AllEnemysList
-                if (AllEnemysList.Count > 0)
+                if (_allEnemysList.Count > 0)
                 // si la liste d'ennemie est supperieur à 0
                 {
-                    foreach (var aEnemy in AllEnemysList.ToList())
+                    foreach (Enemy aEnemy in _allEnemysList.ToList())
                     {
                         aEnemy.EnemyMove();
                         aEnemy.Render(airspace);
@@ -126,50 +111,42 @@ namespace Scramble
                 }
 
                 // affiche les items missile
-                foreach (var aMissileItem in missileItems)
+                foreach (MissileItem aMissileItem in _missileItems)
                 {
                     aMissileItem.Render(airspace);
                 }
 
 
-                if (healItems.Count > 0)
+                if (_healItems.Count > 0)
                 // si il y a des items de heal sur AirSpace
                 {
                     // affiche les items de heal
-                    foreach (var aHealItem in healItems.ToList())
+                    foreach (HealItem aHealItem in _healItems.ToList())
                     {
                         aHealItem.Render(airspace);
                     }
                 }
 
-                
-
-                
-
-                
-
-                
-
-                foreach (var aEnemy in AllEnemysList.ToList())
+                foreach (Enemy aEnemy in _allEnemysList.ToList())
                 {
                     aEnemy.EnemyShoot();
 
                     // Boucle pour afficher les tirs de l'ennemi
 
-                    foreach (var shoot in aEnemy.enemyShoots.ToList())
+                    foreach (Shoot shoot in aEnemy.EnemyShoots.ToList())
                     {
-                        shoot.Render(airspace, aEnemy.enemyShoots);
+                        shoot.Render(airspace, aEnemy.EnemyShoots);
                         shoot.ShootMove();
 
                         // vérifie si un tir enemy touche le jouer
-                        CheckEnemyShootCollisionWhithPlayer(ship, aEnemy.enemyShoots);
+                        CheckEnemyShootCollisionWhithPlayer(_ship, aEnemy.EnemyShoots);
                     }
                 }
-                CheckPlayerShootCollisionWhithEnemys(AllEnemysList, ship.playerShoots);
+                CheckPlayerShootCollisionWhithEnemys(_allEnemysList, _ship.PlayerShoots);
 
 
                 // va afficher et faire bouger le joueur
-                ship.Render(airspace);
+                _ship.Render(airspace);
 
 
             } else
@@ -181,25 +158,25 @@ namespace Scramble
                 // explosion du joueur
                 if (_timingExplosionPlayer <= 4)
                 {
-                    airspace.Graphics.DrawImage(Resources.ShipExplosion1, ship.X, ship.Y, 100, 100);
+                    airspace.Graphics.DrawImage(Resources.ShipExplosion1, _ship.X, _ship.Y, 100, 100);
                 }
                 else if (_timingExplosionPlayer <= 8)
                 {
-                airspace.Graphics.DrawImage(Resources.ShipExplosion2, ship.X, ship.Y, 100, 100);
+                airspace.Graphics.DrawImage(Resources.ShipExplosion2, _ship.X, _ship.Y, 100, 100);
                 }
                 else if (_timingExplosionPlayer <= 12)
                 {
-                airspace.Graphics.DrawImage(Resources.ShipExplosion3, ship.X, ship.Y, 100, 100);
+                airspace.Graphics.DrawImage(Resources.ShipExplosion3, _ship.X, _ship.Y, 100, 100);
 
                 }
                 else if (_timingExplosionPlayer <= 16)
                 {
-                airspace.Graphics.DrawImage(Resources.ShipExplosion4, ship.X, ship.Y, 100, 100);
+                airspace.Graphics.DrawImage(Resources.ShipExplosion4, _ship.X, _ship.Y, 100, 100);
 
                 }
 
                 // affiche le game over
-                airspace.Graphics.DrawString(($"Game over"), new Font("Arial", 50), fontBrush, new PointF(WIDTH / 2 - 150, HEIGHT / 2 - ground[1] + 50));
+                airspace.Graphics.DrawString(($"Game over"), new Font("Arial", 50), _fontBrush, new PointF(WIDTH / 2 - 150, HEIGHT / 2 - ground[1] + 50));
             }
 
             GC.Collect();
@@ -209,25 +186,25 @@ namespace Scramble
         private void Update(int interval)
         {
             // verifie les collision entre le joueur et le sol
-            ship.CheckGroundCollisionPlayer();
+            _ship.CheckGroundCollisionPlayer();
 
             // va verifier si le joueur entre en colision avec un enemie
-            CheckEnemyCollision(ship, AllEnemysList);
+            CheckEnemyCollision(_ship, _allEnemysList);
 
             // fait apparaitre les ennemies sur l'écran
             SpawnRandomEnemy();
 
             // va verifier si le joueur entre en colision avec un pack de soin
-            CheckHealItemCollision(healItems);
+            CheckHealItemCollision(_healItems);
 
             // vérifie la collision entre le joueur et les items récuperable de missiles
-            CheckMissileItemCollision(missileItems);
+            CheckMissileItemCollision(_missileItems);
 
             // verifie les collision entre le joueur et l'ennemie de type Sniper
             CheckSniperShootCollision();
 
             // affiche l'hud du joueur, donc sa reserve de missile
-            Hud.Render(airspace, ship);
+            Hud.Render(airspace, _ship);
         }
 
         // Méthode appelée à chaque frame
@@ -243,22 +220,22 @@ namespace Scramble
             switch (e.KeyCode)
             {
                 case Keys.W:
-                    ship.GoUp = true;
+                    _ship.GoUp = true;
                     break;
                 case Keys.A:
-                    ship.GoLeft = true;
+                    _ship.GoLeft = true;
                     break;
                 case Keys.S:
-                    ship.GoDown = true;
+                    _ship.GoDown = true;
                     break;
                 case Keys.D:
-                    ship.GoRight = true;
+                    _ship.GoRight = true;
                     break;
                 case Keys.Space:
-                    ship.isShooting = true;
+                    _ship.IsShooting = true;
                     break;
                 case Keys.E:
-                    ship.isShootingMissile = true;
+                    _ship.IsShootingMissile = true;
                     break;
             }
         }
@@ -269,22 +246,22 @@ namespace Scramble
             switch (e.KeyCode)
             {
                 case Keys.W:
-                    ship.GoUp = false;
+                    _ship.GoUp = false;
                     break;
                 case Keys.A:
-                    ship.GoLeft = false;
+                    _ship.GoLeft = false;
                     break;
                 case Keys.S:
-                    ship.GoDown = false;
+                    _ship.GoDown = false;
                     break;
                 case Keys.D:
-                    ship.GoRight = false;
+                    _ship.GoRight = false;
                     break;
                 case Keys.Space:
-                    ship.isShooting = false;
+                    _ship.IsShooting = false;
                     break;
                 case Keys.E:
-                    ship.isShootingMissile = false;
+                    _ship.IsShootingMissile = false;
                     break;
             }
         }
@@ -295,11 +272,11 @@ namespace Scramble
         /// <param name="healItems"></param>
         public void CheckHealItemCollision(List<HealItem> healItems)
         {
-            foreach (var aHealItem in healItems.ToList())
+            foreach (HealItem aHealItem in healItems.ToList())
             {                
-                if (ship.shipRectCollision.IntersectsWith(aHealItem.healItemRectCollision) && ship.healPoint < 5)
+                if (_ship.ShipRectCollision.IntersectsWith(aHealItem.HealItemRectCollision) && _ship.HealPoint < 5)
                 {
-                    ship.healPoint++;
+                    _ship.HealPoint++;
                     healItems.Remove(aHealItem);
                 }
             }
@@ -311,13 +288,13 @@ namespace Scramble
         /// <param name="missileItems">Correspond à la liste de missile présent dans AirSpace</param>
         public void CheckMissileItemCollision(List<MissileItem> missileItems)
         {
-            foreach (var aMissileItem in missileItems.ToList())
+            foreach (MissileItem aMissileItem in missileItems.ToList())
             {                
-                if (ship.shipRectCollision.IntersectsWith(aMissileItem.missileItemRectCollision))
+                if (_ship.ShipRectCollision.IntersectsWith(aMissileItem.MissileItemRectCollision))
                 // si le joueur entre en collision avec un item récuperable de missile
                 {
                     // incrémente sa réserve de missile
-                    ship.reserveMissile++;
+                    _ship.ReserveMissile++;
 
                     // retire l'item du jeu
                     missileItems.Remove(aMissileItem);
@@ -334,7 +311,7 @@ namespace Scramble
         {
             foreach (Enemy enemy in enemys)
             {
-                if (ship.shipRectCollision.IntersectsWith(enemy.EnemyRectCollision) && ship.PlayerCanBeHit())
+                if (ship.ShipRectCollision.IntersectsWith(enemy.EnemyRectCollision) && ship.PlayerCanBeHit())
                 {
                     ship.PlayerHitIsNow();
                 }
@@ -350,7 +327,7 @@ namespace Scramble
         {
             foreach (Shoot shoot in shoots.ToList())
             {
-                if (shoot.IsAPlayerShoot == false && ship.shipRectCollision.IntersectsWith(shoot.ShootRectCollision) && ship.PlayerCanBeHit())
+                if (shoot.IsAPlayerShoot == false && ship.ShipRectCollision.IntersectsWith(shoot.ShootRectCollision) && ship.PlayerCanBeHit())
                 {
                     ship.PlayerHitIsNow();
                     shoots.Remove(shoot);
@@ -382,11 +359,11 @@ namespace Scramble
                             if (shoot is Missile)
                             // si le shoot est de la classe missile
                             {
-                                if (enemy.healPoint > 3)
+                                if (enemy.HealPoint > 3)
                                 // si les points de vie de l'ennemie son supperieur à trois
                                 {
                                     // retire 3 points de vie à l'ennemie
-                                    enemy.healPoint -= 3;
+                                    enemy.HealPoint -= 3;
                                 }
                                 else
                                 {
@@ -400,11 +377,11 @@ namespace Scramble
                                 if (!(enemy is TankEnemy))
                                 // si la classe de l'ennemie est différent de TankEnemy
                                 { 
-                                    if (enemy.healPoint > 1)
+                                    if (enemy.HealPoint > 1)
                                     // si les point de vie de l'ennemie sont supperieur à un
                                     {
                                         // retire un point de vie à l'ennemie
-                                        enemy.healPoint--;
+                                        enemy.HealPoint--;
                                     }
                                     else
                                     {
@@ -423,18 +400,21 @@ namespace Scramble
                                     // crée un item de soin
                                     HealItem enemyDropHealItem = new HealItem(enemy.X, enemy.Y);
                                     // met un item de soin dans la liste prévu à cet effet
-                                    healItems.Add(enemyDropHealItem);
+                                    _healItems.Add(enemyDropHealItem);
                                 } else if (GlobalHelpers.alea.Next(4) == 0)
                                 // à sa mort, un enemie à une chance sur 20 de lacher un item de soin
                                 {
                                     // crée un item rammasable missile
                                     MissileItem enemyDropMissileItem = new MissileItem(enemy.X, enemy.Y);
                                     // met un item rammasable missile dans la liste prévu à cet effet
-                                    missileItems.Add(enemyDropMissileItem);
+                                    _missileItems.Add(enemyDropMissileItem);
                                 }
 
                                 // supprime l'ennemie du jeu
                                 enemys.Remove(enemy);
+
+                                // ajoute du score à la mort d'un ennemie
+                                ScorePoint += 100;
                             }
                             // le tir ayant touché, il est retirer du jeu
                             shoots.Remove(shoot);
@@ -449,18 +429,18 @@ namespace Scramble
         /// </summary>
         public void CheckSniperShootCollision()
         {            
-            foreach (var aEnemy in AllEnemysList)
+            foreach (Enemy aEnemy in _allEnemysList)
             // recherche dans toute la liste d'ennemies présent dans AirSpace
             {
                 if (aEnemy.GetType() == typeof(SniperEnemy))
                 // si l'ennemie est de type SniperEnemy
                 {
-                    if (ship.shipRectCollision.IntersectsWith(aEnemy.SniperShoot) && ship.PlayerCanBeHit())
+                    if (_ship.ShipRectCollision.IntersectsWith(aEnemy.SniperShoot) && _ship.PlayerCanBeHit())
                     // si le rectangle de collision entre en contacte avec le rectangle de dégat de SniperShoot
                     //      et que le joueur peut être touché
                     {
                         // le joueur est touché
-                        ship.PlayerHitIsNow();
+                        _ship.PlayerHitIsNow();
                     }
                 }
             }
@@ -480,19 +460,19 @@ namespace Scramble
                 {
                     case 1:
                         BasicEnemy aBasicEnemy = new BasicEnemy(AirSpace.WIDTH - 50, GlobalHelpers.alea.Next(0, 700));
-                        AllEnemysList.Add(aBasicEnemy);
+                        _allEnemysList.Add(aBasicEnemy);
                         break;
                     case 2:
                         FrontEnemy aFrontEnemy = new FrontEnemy(AirSpace.WIDTH, GlobalHelpers.alea.Next(0, 700));
-                        AllEnemysList.Add(aFrontEnemy);
+                        _allEnemysList.Add(aFrontEnemy);
                         break;
                     case 3:
                         SniperEnemy aSniperEnemy = new SniperEnemy(AirSpace.WIDTH, GlobalHelpers.alea.Next(0, 700));
-                        AllEnemysList.Add(aSniperEnemy);
+                        _allEnemysList.Add(aSniperEnemy);
                         break;
                     case 4:
-                        TankEnemy aTankEnemy = new TankEnemy(ship, AirSpace.WIDTH, GlobalHelpers.alea.Next(0, 700));
-                        AllEnemysList.Add(aTankEnemy);
+                        TankEnemy aTankEnemy = new TankEnemy(_ship, AirSpace.WIDTH, GlobalHelpers.alea.Next(0, 700));
+                        _allEnemysList.Add(aTankEnemy);
                         break;
                 }
 

@@ -13,25 +13,25 @@ namespace Scramble
         public int Y;
 
         // Valeur de taille d'un ennemie par défaut
-        protected int WIDTH;
-        protected int HEIGHT;
+        protected int width;
+        protected int height;
 
         // rectangle de collision du tir de l'ennemie
         public Rectangle SniperShoot;
 
         // Valeur, devant être redéfini, de la vie d'un ennemie
-        public int healPoint;
+        public int HealPoint;
 
         // défini la dernière fois que l'ennemie à tiré
         private DateTime _lastEnemyBulletShoot;
         // défini le temps entre deux tir d'un ennemie
-        protected TimeSpan _enemyShootCooldown;
+        protected TimeSpan enemyShootCooldown;
 
         // rectangle servant à détecter les collisions
         public Rectangle EnemyRectCollision;
 
         // liste des tirs de l'ennmie
-        public List<Shoot> enemyShoots = new List<Shoot>();
+        public List<Shoot> EnemyShoots = new List<Shoot>();
 
         public Enemy(int x, int y) { 
             // Défini la position de l'ennemie lors de la création de l'objet
@@ -44,13 +44,13 @@ namespace Scramble
         /// </summary>
         public virtual void EnemyShoot()
         {
-            if (DateTime.Now - _lastEnemyBulletShoot >= _enemyShootCooldown)
+            if (DateTime.Now - _lastEnemyBulletShoot >= enemyShootCooldown)
             // si le temps acctuel moins la dernière fois que l'ennemie à tiré est supperieur au temps entre deux tirs
             {
                 // crée un projectile propre à l'ennemie
-                Shoot aEnemyShoot = new Shoot(X, Y + HEIGHT / 2, false);
+                Shoot aEnemyShoot = new Shoot(X, Y + height / 2, false);
                 // ajoute le tir dans la liste de tirs propre à l'ennemie
-                enemyShoots.Add(aEnemyShoot);
+                EnemyShoots.Add(aEnemyShoot);
 
                 // défini que le dernier tir viens d'avoir lieu
                 _lastEnemyBulletShoot = DateTime.Now;
@@ -58,7 +58,7 @@ namespace Scramble
         }
 
         /// <summary>
-        /// Permet à l'ennemie de se déplacer sur la carte
+        /// Permet à l'ennemie de se déplacer sur AirSpace
         /// </summary>
         public virtual void EnemyMove()
         {

@@ -9,11 +9,9 @@ namespace Scramble
 {
     public partial class HealItem
     {
-        ////////////////////Brush testBrush = new SolidBrush(Color.Red);
         public void Render(BufferedGraphics drawingSpace)
         {
             drawingSpace.Graphics.DrawImage(Resources.HealItem, _x, _y, WIDTH, HEIGHT);
-            ////////////////////drawingSpace.Graphics.FillRectangle(testBrush, healItemRectCollision);
         }
     }
 }

@@ -8,19 +8,22 @@ namespace Scramble
 {
     public partial class MissileItem
     {
-        public int _x;
-        public int _y;
+        // position du missile item
+        private int _x;
+        private int _y;
 
-        public readonly int WIDTH = 30;
-        public readonly int HEIGHT = 30;
+        // taille du missile item
+        private readonly int _WIDTH = 30;
+        private readonly int _HEIGHT = 30;
 
-        public Rectangle missileItemRectCollision;
+        // rectangle pour detecter les collision avec le joueur
+        public Rectangle MissileItemRectCollision;
         public MissileItem(int X, int Y)
         {
             _x = X;
             _y = Y;
 
-            missileItemRectCollision = new Rectangle(_x, _y, WIDTH, HEIGHT);
+            MissileItemRectCollision = new Rectangle(_x, _y, _WIDTH, _HEIGHT);
         }
     }
 }

@@ -11,9 +11,7 @@ namespace Scramble
     {
         public void Render(BufferedGraphics drawingSpace)
         {
-
-            drawingSpace.Graphics.DrawImage(Resources.MissileItem, _x, _y, WIDTH, HEIGHT);
-
+            drawingSpace.Graphics.DrawImage(Resources.MissileItem, _x, _y, _WIDTH, _HEIGHT);
         }
     }
 }

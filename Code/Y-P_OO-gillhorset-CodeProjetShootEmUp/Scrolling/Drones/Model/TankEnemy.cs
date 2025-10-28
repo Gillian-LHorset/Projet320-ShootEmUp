@@ -23,18 +23,17 @@ namespace Scramble
         public TankEnemy(Ship player, int x, int y) : base(x, y)
         {
             // défini les points de vie de l'ennemie à sa création
-            healPoint = HEALPOINTMAX;
+            HealPoint = HEALPOINTMAX;
 
             // défini la taille de l'ennemie
-            WIDTH = 45;
-            HEIGHT = 45;
+            width = 45;
+            height = 45;
 
             // défini le rectangle de collision à la position et aux proportions de l'ennemie
-            EnemyRectCollision = new Rectangle(x, y, WIDTH, HEIGHT);
+            EnemyRectCollision = new Rectangle(x, y, width, height);
 
             // importe les informations du joueur
             _player = player;
-
         }
 
         /// <summary>
@@ -42,6 +41,9 @@ namespace Scramble
         /// </summary>
         public override void EnemyShoot() {}
 
+        /// <summary>
+        /// fait déplacer l'ennemie en direction du joueur
+        /// </summary>
         public override void EnemyMove() {
 
             if (X + Ship.WIDTH < _player.X)

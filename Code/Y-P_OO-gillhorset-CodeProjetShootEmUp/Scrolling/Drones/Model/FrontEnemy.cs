@@ -26,17 +26,17 @@ namespace Scramble
         public FrontEnemy(int x, int y) : base(x, y)
         {
             // point de vie de l'ennemie à sa création
-            healPoint = HEALPOINTMAX;
+            HealPoint = HEALPOINTMAX;
 
             // défini la taille de l'ennemie
-            WIDTH = 60;
-            HEIGHT = 60;
+            width = 60;
+            height = 60;
 
             // défini le cooldown de tir en modifiant la variable qui est présente dans la classe parent
-            _enemyShootCooldown = TimeSpan.FromSeconds(1.3);
+            enemyShootCooldown = TimeSpan.FromSeconds(1.3);
 
             // défini le rectangle de collision à la position et aux proportions de l'ennemie
-            EnemyRectCollision = new Rectangle(x, y, WIDTH, HEIGHT);
+            EnemyRectCollision = new Rectangle(x, y, width, height);
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace Scramble
                 // lui donne l'ordre de commencer à déscendre
                 _isEnemyGoingDown = true;
             }
-            if (Y + HEIGHT + _yMoveSpeed > AirSpace.HEIGHT - Ship.ShipGround[X / 10])
+            if (Y + height + _yMoveSpeed > AirSpace.HEIGHT - Ship.ShipGround[X / 10])
             // si la position de l'ennemie est au niveau du sol
             {
                 // remonte l'ennemie
@@ -80,7 +80,7 @@ namespace Scramble
             }
             
 
-            if (X + WIDTH + 30 > AirSpace.WIDTH)
+            if (X + width + 30 > AirSpace.WIDTH)
             // si la position de l'ennemie est à droite de l'écran
             {
                 // il à l'ordre d'avancer
