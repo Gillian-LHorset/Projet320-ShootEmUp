@@ -39,7 +39,8 @@ namespace Scramble
         private DateTime _lastEnemySpawned;
         private TimeSpan _enemySpawnCooldown;
 
-        public static int ScorePoint;
+        // score nécessaire pour la victoire
+        public static int ScorePoint = 0;
 
         // Initialisation de l'espace aérien avec un certain nombre de ships
         public AirSpace(Ship ship)
@@ -75,10 +76,9 @@ namespace Scramble
             for (int i = 0; i < ground.Length; i++)
             {
                 airspace.Graphics.FillRectangle(groundBrush, new Rectangle(i * 10 - _scrollSmoother, HEIGHT - ground[i], 10, ground[i]));
-            }            
+            }
 
             if (_ship.IsInLife)
-            // si le joueur est encore en vie
             {
                 // systeme de génération du sol
                 _scrollSmoother = (_scrollSmoother + 5) % 10;
@@ -91,6 +91,19 @@ namespace Scramble
                         Ship.ShipGround[i] = ground[i];
                     }
                 }
+            }
+
+            // va affiche le vaisseau
+            _ship.Render(airspace);
+
+            // affiche l'hud du joueur, donc sa reserve de missile
+            Hud.Render(airspace, _ship);
+
+            if (_ship.IsInLife && ScorePoint < 2000)
+            // si le joueur est encore en vie
+            {
+                // fait bouger le vaisseau
+                _ship.MoveShip();
 
                 // déplace les tirs du joueur
                 foreach (Shoot shoot in _ship.PlayerShoots.ToList())
@@ -132,7 +145,6 @@ namespace Scramble
                     aEnemy.EnemyShoot();
 
                     // Boucle pour afficher les tirs de l'ennemi
-
                     foreach (Shoot shoot in aEnemy.EnemyShoots.ToList())
                     {
                         shoot.Render(airspace, aEnemy.EnemyShoots);
@@ -143,13 +155,7 @@ namespace Scramble
                     }
                 }
                 CheckPlayerShootCollisionWhithEnemys(_allEnemysList, _ship.PlayerShoots);
-
-
-                // va afficher et faire bouger le joueur
-                _ship.Render(airspace);
-
-
-            } else
+            } else if (!_ship.IsInLife)
             // si le joueur n'est plus en vie
             {
                 // incrément la variable qui fait afficher les différentes frames de l'explosion
@@ -177,34 +183,40 @@ namespace Scramble
 
                 // affiche le game over
                 airspace.Graphics.DrawString(($"Game over"), new Font("Arial", 50), _fontBrush, new PointF(WIDTH / 2 - 150, HEIGHT / 2 - ground[1] + 50));
+            } 
+            else if (ScorePoint >= 2000)
+            {
+                // affiche l'écran de victoire
+                airspace.Graphics.DrawString(($"Vous avez gagné !"), new Font("Arial", 50), _fontBrush, new PointF(WIDTH / 2 - 250, HEIGHT / 2 - 100));
             }
 
+            // utilise le garbadge collector pour éviter une surcharge de la mémoire
             GC.Collect();
         }
 
         // Calcul du nouvel état après que 'interval' millisecondes se sont écoulées
         private void Update(int interval)
         {
-            // verifie les collision entre le joueur et le sol
-            _ship.CheckGroundCollisionPlayer();
+            if (_ship.IsInLife && ScorePoint < 2000)
+            {
+                // verifie les collision entre le joueur et le sol
+                _ship.CheckGroundCollisionPlayer();
 
-            // va verifier si le joueur entre en colision avec un enemie
-            CheckEnemyCollision(_ship, _allEnemysList);
+                // va verifier si le joueur entre en colision avec un enemie
+                CheckEnemyCollision(_ship, _allEnemysList);
 
-            // fait apparaitre les ennemies sur l'écran
-            SpawnRandomEnemy();
+                // fait apparaitre les ennemies sur l'écran
+                SpawnRandomEnemy();
 
-            // va verifier si le joueur entre en colision avec un pack de soin
-            CheckHealItemCollision(_healItems);
+                // va verifier si le joueur entre en colision avec un pack de soin
+                CheckHealItemCollision(_healItems);
 
-            // vérifie la collision entre le joueur et les items récuperable de missiles
-            CheckMissileItemCollision(_missileItems);
+                // vérifie la collision entre le joueur et les items récuperable de missiles
+                CheckMissileItemCollision(_missileItems);
 
-            // verifie les collision entre le joueur et l'ennemie de type Sniper
-            CheckSniperShootCollision();
-
-            // affiche l'hud du joueur, donc sa reserve de missile
-            Hud.Render(airspace, _ship);
+                // verifie les collision entre le joueur et l'ennemie de type Sniper
+                CheckSniperShootCollision();
+            }
         }
 
         // Méthode appelée à chaque frame

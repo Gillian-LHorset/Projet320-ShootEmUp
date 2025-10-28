@@ -16,9 +16,6 @@ namespace Scramble
 
         public void Render(BufferedGraphics drawingSpace)
         {
-            // fait bouger le vaisseau
-            MoveShip();
-
             if (!PlayerCanBeHit())
             // si le joueur ne peut pas être touché
             {
