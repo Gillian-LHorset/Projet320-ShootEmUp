@@ -143,6 +143,46 @@ namespace Scramble.Properties {
         /// <summary>
         ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap ShipExplosion1 {
+            get {
+                object obj = ResourceManager.GetObject("ShipExplosion1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ShipExplosion2 {
+            get {
+                object obj = ResourceManager.GetObject("ShipExplosion2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ShipExplosion3 {
+            get {
+                object obj = ResourceManager.GetObject("ShipExplosion3", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ShipExplosion4 {
+            get {
+                object obj = ResourceManager.GetObject("ShipExplosion4", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap SniperEnemy {
             get {
                 object obj = ResourceManager.GetObject("SniperEnemy", resourceCulture);

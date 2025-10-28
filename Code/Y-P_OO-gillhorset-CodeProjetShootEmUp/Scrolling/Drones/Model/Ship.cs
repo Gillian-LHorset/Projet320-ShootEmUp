@@ -47,7 +47,7 @@ namespace Scramble
 
         public bool isOkey = false;
         public bool haveShoot = false;
-        public static bool isInLife = true;
+        public bool IsInLife = true;
 
         public static int[] ShipGround = new int[AirSpace.WIDTH / 10 + 1];
 
@@ -64,65 +64,62 @@ namespace Scramble
         private TimeSpan _missileCooldown = TimeSpan.FromSeconds(1);
 
         public void MoveShip()
-        {
-
-            if (isInLife)
+        {            
+            if (_goUpBool)
             {
-                if (_goUpBool)
+                if (_y > 10)
                 {
-                    if (_y > 10)
-                    {
-                        _y -= 15;
-                    }
-                }
-                if (_goLeftBool)
-                {
-                    if (_x > 15)
-                    {
-                        _x -= 15;
-                    }
-
-                }
-                if (_goDownBool)
-                {
-                    if (Ship.HEIGHT + _y + 30 < AirSpace.HEIGHT - ShipGround[_x / 10])  
-                        // position _x du vaisseau entre crochet
-                        // si la hauteur de la position du vaisseau et sa taille sont superieur à la hauteur de l'écran moins la hauteur du sol
-                    {
-                        isOkey = true;
-                    }
-                    else
-                    {
-                        isOkey = false;
-                    }
-                    if (isOkey && _y < AirSpace.HEIGHT - Ship.HEIGHT)
-                    {
-                        _y += 15;
-                    }
-
-                }
-                if (_goRightBool)
-                {
-                    if (_x < AirSpace.WIDTH - Ship.WIDTH - 10)
-                    {
-                        _x += 15;
-                    }
-                }
-
-                if (isShooting)
-                {
-                    if (DateTime.Now - _lastBulletShoot >= _shootCooldown)
-                    {
-                        Shoot aShoot = new Shoot(_x + Ship.WIDTH, _y + Ship.HEIGHT / 2, true);
-                        playerShoots.Add(aShoot);
-                        _lastBulletShoot = DateTime.Now;
-                    }
-                }
-                if (isShootingMissile)
-                {
-                    PlayerShootMissile();
+                    _y -= 15;
                 }
             }
+            if (_goLeftBool)
+            {
+                if (_x > 15)
+                {
+                    _x -= 15;
+                }
+
+            }
+            if (_goDownBool)
+            {
+                if (Ship.HEIGHT + _y + 30 < AirSpace.HEIGHT - ShipGround[_x / 10])  
+                    // position _x du vaisseau entre crochet
+                    // si la hauteur de la position du vaisseau et sa taille sont superieur à la hauteur de l'écran moins la hauteur du sol
+                {
+                    isOkey = true;
+                }
+                else
+                {
+                    isOkey = false;
+                }
+                if (isOkey && _y < AirSpace.HEIGHT - Ship.HEIGHT)
+                {
+                    _y += 15;
+                }
+
+            }
+            if (_goRightBool)
+            {
+                if (_x < AirSpace.WIDTH - Ship.WIDTH - 10)
+                {
+                    _x += 15;
+                }
+            }
+
+            if (isShooting)
+            {
+                if (DateTime.Now - _lastBulletShoot >= _shootCooldown)
+                {
+                    Shoot aShoot = new Shoot(_x + Ship.WIDTH, _y + Ship.HEIGHT / 2, true);
+                    playerShoots.Add(aShoot);
+                    _lastBulletShoot = DateTime.Now;
+                }
+            }
+            if (isShootingMissile)
+            {
+                PlayerShootMissile();
+            }
+            
 
             shipRectCollision.X = _x;
             shipRectCollision.Y = _y;
@@ -167,6 +164,11 @@ namespace Scramble
             _lastCollisionCheck = DateTime.Now;
             // retire 1 point de vie au joueur   
             healPoint--;
+
+            if (healPoint < 1)
+            {
+                IsInLife = false;
+            }
         }
 
         /// <summary>
