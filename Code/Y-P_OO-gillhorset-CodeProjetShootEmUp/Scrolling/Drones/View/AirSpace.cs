@@ -1,4 +1,5 @@
 using Scramble.Properties;
+using Scramble.View;
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices.JavaScript;
@@ -150,6 +151,9 @@ namespace Scramble
 
             //
             CheckSniperShootCollision();
+
+            // 
+            Hud.Render(airspace, ship);
 
             foreach (var aEnemy in AllEnemysList.ToList())
             {
@@ -361,7 +365,7 @@ namespace Scramble
                                     HealItem enemyDropHealItem = new HealItem(enemy.X, enemy.Y);
                                     // met un item de soin dans la liste prévu à cet effet
                                     healItems.Add(enemyDropHealItem);
-                                } else if (GlobalHelpers.alea.Next(15) == 0)
+                                } else if (GlobalHelpers.alea.Next(4) == 0)
                                 // à sa mort, un enemie à une chance sur 20 de lacher un item de soin
                                 {
                                     // crée un item rammasable missile
