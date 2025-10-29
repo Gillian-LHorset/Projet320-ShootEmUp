@@ -62,6 +62,30 @@ namespace Scramble
             this.KeyPreview = true; // Ensures the form captures key events before child controls
             this.KeyDown += AirSpace_KeyDown;
             this.KeyUp += AirSpace_KeyUp;
+
+            for (int i = 0; i < 10; i++)
+            {
+                switch (GlobalHelpers.alea.Next(1, 5))
+                // génère un nombre aléatoire entre 1 et 4
+                {
+                    case 1:
+                        BasicEnemy aBasicEnemy = new BasicEnemy(AirSpace.WIDTH - 50, GlobalHelpers.alea.Next(0, 700));
+                        _allEnemysList.Add(aBasicEnemy);
+                        break;
+                    case 2:
+                        FrontEnemy aFrontEnemy = new FrontEnemy(AirSpace.WIDTH, GlobalHelpers.alea.Next(0, 700));
+                        _allEnemysList.Add(aFrontEnemy);
+                        break;
+                    case 3:
+                        SniperEnemy aSniperEnemy = new SniperEnemy(AirSpace.WIDTH, GlobalHelpers.alea.Next(0, 700));
+                        _allEnemysList.Add(aSniperEnemy);
+                        break;
+                    case 4:
+                        TankEnemy aTankEnemy = new TankEnemy(_ship, AirSpace.WIDTH, GlobalHelpers.alea.Next(0, 700));
+                        _allEnemysList.Add(aTankEnemy);
+                        break;
+                }
+            }
         }
 
         // Affichage de la situation actuelle
