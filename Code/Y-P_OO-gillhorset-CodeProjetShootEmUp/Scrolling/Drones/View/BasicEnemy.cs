@@ -14,7 +14,7 @@ namespace Scramble
         {
             drawingSpace.Graphics.DrawImage(Resources.BasicEnemy, X, Y, width, height);
             // affiche la barre de vie au dessus de l'ennemie
-            HealBar.DisplayHealBar(drawingSpace, X, Y, width, HealPoint, HEALPOINTMAX);
+            HealthBar.DisplayHealthBar(drawingSpace, X, Y, width, HealPoint, HEALPOINTMAX);
         }
     }
 }

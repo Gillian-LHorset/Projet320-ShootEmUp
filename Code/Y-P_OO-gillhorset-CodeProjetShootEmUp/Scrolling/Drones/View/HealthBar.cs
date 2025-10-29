@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Scramble.View
 {
-    internal class HealBar
+    internal class HealthBar
     {
-        public static void DisplayHealBar(BufferedGraphics airspace, int x, int y, int WIDTH, int entityHealPoint, int maxHealPoint)
+        public static void DisplayHealthBar(BufferedGraphics airspace, int x, int y, int WIDTH, int entityHealthPoint, int maxHealPoint)
         {
             // défini si l'entité est encore en vie
             bool isInLife;
@@ -21,21 +21,21 @@ namespace Scramble.View
             y -= 10;
 
             // couleur de l'interieur de la bar
-            Brush healBarBrush = new SolidBrush(Color.Red);
+            Brush healthBarBrush = new SolidBrush(Color.Red);
             // couleur du tour de la barre de vie
-            Pen aroundHealBarPen = new Pen(Color.Black);
+            Pen aroundHealthBarPen = new Pen(Color.Black);
             // couleur dessour la couleur rouge de la bar de vie
-            Brush decressesHealBarBrush = new SolidBrush(Color.Gray);
+            Brush decressesHealthBarBrush = new SolidBrush(Color.Gray);
 
 
-            airspace.Graphics.FillRectangle(decressesHealBarBrush, new Rectangle(x, y, barWidth, barHeight));
+            airspace.Graphics.FillRectangle(decressesHealthBarBrush, new Rectangle(x, y, barWidth, barHeight));
 
             // zone rouge indiquant la vie du joueur
             // sa taille est relavite a healPoint du joueur pour donner une indication de manière graphique
-            airspace.Graphics.FillRectangle(healBarBrush, new Rectangle(x, y, (barWidth / maxHealPoint) * entityHealPoint, barHeight));
+            airspace.Graphics.FillRectangle(healthBarBrush, new Rectangle(x, y, (barWidth / maxHealPoint) * entityHealthPoint, barHeight));
             // affiche le tour de la healbar
-            airspace.Graphics.DrawRectangle(aroundHealBarPen, new Rectangle(x, y, barWidth, barHeight));
-            if (entityHealPoint < 1)
+            airspace.Graphics.DrawRectangle(aroundHealthBarPen, new Rectangle(x, y, barWidth, barHeight));
+            if (entityHealthPoint < 1)
             // si les points de vie de l'entité sont plus petit que 1
             {
                 // l'entité n'est plus en vie

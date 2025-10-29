@@ -286,9 +286,9 @@ namespace Scramble
         {
             foreach (HealItem aHealItem in healItems.ToList())
             {                
-                if (_ship.ShipRectCollision.IntersectsWith(aHealItem.HealItemRectCollision) && _ship.HealPoint < 5)
+                if (_ship.ShipRectCollision.IntersectsWith(aHealItem.HealItemRectCollision) && _ship.HealthPoint < 5)
                 {
-                    _ship.HealPoint++;
+                    _ship.HealthPoint++;
                     healItems.Remove(aHealItem);
                 }
             }

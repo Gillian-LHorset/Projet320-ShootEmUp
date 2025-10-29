@@ -31,7 +31,7 @@ namespace Scramble
             }
 
             // affiche la bar de vie du joueur
-            HealBar.DisplayHealBar(drawingSpace, _x, _y, WIDTH, HealPoint, MaxHealPoint);
+            HealthBar.DisplayHealthBar(drawingSpace, _x, _y, WIDTH, HealthPoint, MaxHealthPoint);
         }
     }
 }

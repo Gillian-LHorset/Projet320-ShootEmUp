@@ -39,10 +39,10 @@ namespace Scramble
         private bool _goRightBool;
 
         // vie maximal du joueur
-        public readonly int MaxHealPoint = 5;
+        public readonly int MaxHealthPoint = 5;
 
         // vie acctuel du joueur
-        public int HealPoint = 5;
+        public int HealthPoint = 5;
 
         // défini le nombre de missile que le joueur peut encore tirer
         public int ReserveMissile = 3;
@@ -182,9 +182,9 @@ namespace Scramble
         {
             _lastCollisionCheck = DateTime.Now;
             // retire 1 point de vie au joueur   
-            HealPoint--;
+            HealthPoint--;
 
-            if (HealPoint < 1)
+            if (HealthPoint < 1)
             // si les points de vie sont inferieur à 1
             {
                 // défini la mort du joueur
