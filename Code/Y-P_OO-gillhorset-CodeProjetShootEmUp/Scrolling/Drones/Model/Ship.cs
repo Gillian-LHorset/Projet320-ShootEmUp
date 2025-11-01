@@ -26,8 +26,7 @@ namespace Scramble
         public int X { get { return _x; } set { _x = value; } }
         public int Y { get { return _y;} set { _y = value; } }
 
-        // Cette méthode calcule le nouvel état dans lequel le ship se trouve après
-        // que 'interval' millisecondes se sont écoulées
+        // défini la direction dans laquelle va le ship
         public bool GoUp { get { return _goUpBool; } set { _goUpBool = value; } }
         public bool GoLeft { get { return _goLeftBool; } set { _goLeftBool = value; } }
         public bool GoDown { get { return _goDownBool; } set { _goDownBool = value; } }
