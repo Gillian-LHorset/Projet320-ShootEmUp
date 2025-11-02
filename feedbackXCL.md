@@ -59,3 +59,17 @@ Je suis prêt à vous valider ce projet malgré tout, aux conditions suivantes :
 - votre rapport comporte un excellent diagramme de classes UML
 - les commits montrent une démarche de développement structurée et cohérente
 - vous êtes en mesure de m'expliquer de manière convaincante le fonctionnement de votre programme lors d'une code Review
+
+## Final
+
+ livraison : OK,  bien que les images "analyse fonctionnelle" et "diagramme UML" ne devraient pas figurer en tant que pièces jointes à la livraison, mais plutôt être inclues ou référencées dans le rapport
+
+L'intention est bonne de mettre le diagramme dans le rapport tout en indiquant l'existence du fichier externe pour plus de lisibilité. Cela présente toutefois un problème : vous mettez dans votre rapport une image qui n'apporte rien du tout, car il est impossible d'y lire le contenu des classes. Dans un cas pareil, il faut soit découper le grand schéma en plusieurs petits schéma, soit se contenter de montrer le nom des classes  dans le diagramme complet et afficher des détails plus bas.
+
+ Dans votre rapport, il y a des sections qui n'étaient pas demandées comme par exemple la réalisation technique, mais il manque celle (demandée), qui décrit l'usage que vous avez fait de l'IA durant le projet.
+
+L'évolution de votre code sur la fin du projet est spectaculaire. Avant de me prononcer sur la validation de votre projet:
+  - Faites une nouvelle livraison qui contient un rapport avec la section concernant l'utilisation de l'IA. (8 nov.)
+  - Nous ferons une code review lors de laquelle vous pourrez me démontrer votre maîtrise du code.
+
+J'espère constater durant cette revue que le bon résultat que représente votre programme est le fruit de votre travail.
